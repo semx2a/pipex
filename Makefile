@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/01/18 19:31:48 by seozcan          ###   ########.fr        #
+#    Updated: 2022/01/18 19:43:56 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,12 +34,6 @@ CC		= gcc
 
 WFLAGS	= -Wall -Wextra -Werror
 
-CFLAG 	= -c
-
-OFLAG	= -o
-
-IFLAG	= -I
-
 AR		= ar
 
 ARFLAGS	= rcs
@@ -50,35 +44,28 @@ ARFLAGS	= rcs
 IDIR	= inc/
 
 INC		= $(addprefix $(IDIR), pipex.h)
-
-												# -------------------------- #
-												#          TOOLBOX           #
-												# -------------------------- #
-
-RM		= rm -f
-
-MV		= mv
-
+												
 												# -------------------------- #
                     							#          SCRIPTS           #
 												# -------------------------- #
 
-$(NAME):	$(OBJS) $(MV)
-	$(CC) $(OFLAG) $(NAME) $(addprefix $(ODIR), $(OBJS)) 
+$(NAME):	$(OBJS) $(ODIR)
+	$(CC) -o $(NAME) $(addprefix $(ODIR), $(OBJS)) 
 
-$(MV):		$(OBJS)
-	$(MV) $(OBJS) $(ODIR)
+$(ODIR):
+	@mkdir $(ODIR)
+	@mv $(OBJS) $(ODIR)
 
 $(OBJS):	$(SRCS)
-	$(CC) $(WFLAGS) $(IFLAG) $(INC) $(CFLAG) $(SRCS)
+	$(CC) $(WFLAGS) -I $(INC) -c $(SRCS)
 
 all:		${NAME}
 
 clean:
-	${RM} $(addprefix $(ODIR), $(OBJS))
+	@rm -rf $(ODIR)
 
 fclean:	clean
-	${RM} ${NAME}
+	@rm ${NAME}
 
 re:		fclean all
 
