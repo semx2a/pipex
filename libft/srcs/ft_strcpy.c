@@ -1,25 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/21 12:59:17 by seozcan           #+#    #+#             */
-/*   Updated: 2022/01/21 12:59:25 by seozcan          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-char	*ft_strcpy(char *dest, char *src)
+char	*ft_strcpy(char *dst, char *src)
 {
 	int	i;
 
 	i = 0;
 	while (src[i])
 	{
-		dest[i] = src[i];
+		dst[i] = src[i];
 		i++;
 	}
-	dest[i] = '\0';
-	return (dest);
+	dst[i] = '\0';
+	return (dst);
 }

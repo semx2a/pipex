@@ -1,25 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/21 12:55:43 by seozcan           #+#    #+#             */
-/*   Updated: 2022/01/21 12:56:17 by seozcan          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../inc/libft.h"
 
-int	ft_strlen(char *str)
-{
-	if (*str == '\0')
-		return (0);
-	return (ft_strlen(str + 1) + 1);
-}
-
-int	ft_base_converter(char c, char *base)
+int	ft_chrcheck(char c, char *base)
 {
 	int	i;
 
@@ -33,61 +14,59 @@ int	ft_base_converter(char c, char *base)
 	return (-1);
 }
 
-int	ft_check_base(char *base, int lenbase)
+int	ft_check_base(char *base)
 {
 	int	i;
 	int	j;
+	int	baselen;
 
 	i = 0;
+	j = 0;
+	baselen = ft_strlen(base);
+	if (baselen < 2)
+		return (0);
 	while (base[i])
 	{
-		if (base[i] == '-' || base[i] == '+'
-			|| (base[i] > 8 && base[i] < 14) || base[i] == ' ')
-			return (1);
+		if (base[i] == '+' || base[i] == '-'
+			|| base[i] == 32 || ft_isdigit(base[i]))
+			return (0);
 		j = i + 1;
-		while (j < lenbase)
+		while (base[j])
 		{
-			if (base[i] == base[j])
-				return (1);
+			if (base[j] == base[i])
+				return (0);
 			j++;
 		}
 		i++;
 	}
-	return (0);
-}
-
-int	ft_atoi(char *str, int lenbase, char *base)
-{
-	int	i;
-	int	res;
-	int	neg;
-
-	i = 0;
-	res = 0;
-	neg = 1;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
-		i++;
-	while (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			neg *= (-1);
-		i++;
-	}
-	while (str[i] && ft_base_converter(str[i], base) >= 0)
-	{
-		res = res * lenbase;
-		res = res + ft_base_converter(str[i], base);
-		i++;
-	}
-	return (neg * res);
+	return (1);
 }
 
 int	ft_atoi_base(char *str, char *base)
 {
-	int	lenbase;
+	int				i;
+	unsigned int	r;
+	int				n;
+	int				baselen;
 
-	lenbase = ft_strlen(base);
-	if (ft_check_base(base, lenbase) == 1)
+	i = 0;
+	r = 0;
+	n = 1;
+	baselen = ft_strlen(base);
+	if (!ft_check_base(base))
 		return (0);
-	return (ft_atoi(str, lenbase, base));
+	while (str[i] == 32 || ft_isdigit(str[i]))
+		i++;
+	while (str[i] == 45 || str[i] == 43)
+	{
+		if (str[i] == 45)
+			n = n * -1;
+		i++;
+	}
+	while (ft_chrcheck(str[i], base) >= 0)
+	{
+		r = r * baselen + ft_chrcheck(str[i], base);
+		i++;
+	}
+	return (r * n);
 }

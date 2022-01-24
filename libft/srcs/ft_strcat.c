@@ -1,32 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strcat.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/21 12:58:08 by seozcan           #+#    #+#             */
-/*   Updated: 2022/01/21 12:58:24 by seozcan          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../inc/libft.h"
-
-char	*ft_strcat(char *dest, char *src)
+char	*ft_strcat(char *dst, char *src)
 {
 	int	i;
-	int	l;
+	int	j;
 
 	i = 0;
-	l = 0;
-	while (dest[l])
-		l++;
-	while (src[i])
-	{
-		dest[l] = src[i];
+	j = 0;
+	while (dst[i] != '\0')
 		i++;
-		l++;
-	}
-	dest[l] = '\0';
-	return (dest);
+	while (src[j] != '\0')
+		dst[i++] = src[j++];
+	dst[i] = '\0';
+	return (dst);
 }

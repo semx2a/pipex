@@ -14,14 +14,12 @@
 
 static int	ft_count(char const *s, char a)
 {
-	int	count;
 	int	i;
 
-	count = 0;
 	i = 0;
 	while (s[i] && s[i] != a)
-		count++;
-	return (count);
+		i++;
+	return (i);
 }
 
 static void	ft_freed(char **d, long int j)

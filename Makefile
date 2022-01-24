@@ -60,20 +60,29 @@ LIB		= libft.a
 #          SCRIPTS           #
 # -------------------------- #
 
-$(NAME):	$(LIB) 
-	$(CC) -o $(NAME) $(addprefix $(ODIR), $(OBJS)) $(addprefix $(LDIR), $(LIB)) 
+$(NAME):	%: m_lib 
+	$(CC) -o $(NAME) $(addprefix $(ODIR), $(OBJS)) $(addprefix $(LDIR), $(LIB)) && make clean 
 
-$(LIB):		$(ODIR)
+# -------------------------- #
+#           RULES            #
+# -------------------------- #
+
+all:		${NAME}
+
+m_lib:		o_dir
 	@make -C $(LDIR)
 
-$(ODIR):	$(OBJS)
+o_dir:		o_comp
 	@mkdir $(ODIR)
 	@mv $(OBJS) $(ODIR)
 
-$(OBJS):
-	$(CC) $(WFLAGS) -I $(addprefix $(IDIR), $(INC)) -c $(addprefix $(SDIR), $(SRCS))
+o_comp:
+	$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS))
 
-all:		${NAME}
+git:
+	@git add *
+	@git commit -m 'update'
+	@git push
 
 clean:
 	@rm -rf $(ODIR)
