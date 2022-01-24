@@ -6,12 +6,12 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/01/19 17:46:08 by seozcan          ###   ########.fr        #
+#    Updated: 2022/01/24 17:45:38 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # -------------------------- #
-# 		   TARGET            #
+# 	   TARGET            #
 # -------------------------- #
 
 NAME	= libft.a
@@ -41,11 +41,11 @@ OBJS	= ${SRCS:%.c=%.o}
 #         COMPILERS          #
 # -------------------------- #
 
-CC		= gcc
+CC	= gcc
 
 WFLAGS	= -Wall -Wextra -Werror
 
-AR		= ar
+AR	= ar
 
 ARFLAGS	= rcs
 
@@ -55,7 +55,7 @@ ARFLAGS	= rcs
 
 IDIR	= inc/
 
-INC		= libft.h
+INC	= libft.h
 
 # -------------------------- #
 #          SCRIPTS           #
@@ -80,7 +80,7 @@ o_comp:
 clean:
 	@rm -rf $(ODIR)
 
-fclean:	clean
+fclean:		clean
 	@rm ${NAME}
 
 re:		fclean all

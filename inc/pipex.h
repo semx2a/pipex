@@ -18,5 +18,6 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <stdio.h>
+# include "../libft/inc/libft.h"
 
 #endif

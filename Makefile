@@ -6,12 +6,12 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/01/18 19:43:56 by seozcan          ###   ########.fr        #
+#    Updated: 2022/01/24 17:50:50 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # -------------------------- #
-# 		   TARGET            #
+#	 	   TARGET            #
 # -------------------------- #
 
 NAME	= pipex
@@ -86,12 +86,12 @@ git:
 
 clean:
 	@rm -rf $(ODIR)
-	@make clean -C $(LDIR)
+	@make -C $(LDIR) clean
 
-fclean:	clean
+fclean:		clean
 	@rm ${NAME}
-	@make fclean -C $(LDIR)
+	@make -C $(LDIR) fclean
 
-re:		fclean all
+re:			fclean all
 
 .PHONY:	all clean fclean re
