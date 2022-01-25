@@ -12,43 +12,6 @@
 
 #include "../inc/pipex.h"
 
-int	ft_tablen(char **s)
-{
-	int	i;
-
-	i = 1;
-	while (s[1][i])
-		i++;
-	return (i);
-}
-
-void	ft_print_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		ft_putstr_fd(tab[i], 1);
-		ft_putchar_fd('\n', 1);
-		i++;
-	}
-}
-
-//void	ft_argcat(char **tab, char *s)
-//{
-//	int	i;
-//
-//	i = 0;
-//	while (tab[i])
-//	{
-//		ft_strcat(tab[i], "/");
-//		ft_strcat(tab[i], s);
-//		i++;
-//	}
-//	tab[i] = 0;
-//}
-
 int	main(int ac, char **av, char **env)
 {
 	char	**nvlst;
@@ -63,13 +26,17 @@ int	main(int ac, char **av, char **env)
 		while (env[i])
 		{
 			if (ft_strnstr(env[i], "PATH", 5))
+			{
 				nvlst = ft_split(env[i] + 5, ':');
+				break;
+			}
 			i++;
 		}
 		i = 0;
 		while (nvlst[i])
 		{
-			ft_strjoin(nvlst[i], av[1]);
+			nvlst[i] = ft_strjoin(nvlst[i], "/");
+			nvlst[i] = ft_strjoin(nvlst[i], av[1]);
 			i++;
 		}
 		i = 0;
@@ -88,6 +55,7 @@ int	main(int ac, char **av, char **env)
 			i++;
 		}
 		ft_print_tab(nvlst);
+		ft_free_tab(nvlst, ft_tablen(nvlst));
 	}
 	return (0);
 }
