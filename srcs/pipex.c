@@ -67,13 +67,20 @@ int	main(int ac, char **av, char **env)
 			i++;
 		}
 		ft_argcat(nvlst, av[1]);
-		ft_print_tab(nvlst);
+//		ft_print_tab(nvlst);
 		i = 0;
 		while (nvlst[i])
 		{
-			execve(nvlst[i], av[1], "NULL");
-			perror("execve");
-			exit(EXIT_FAILURE);
+			if (access(nvlst[i], F_OK))
+			{
+				if( !execve(nvlst[i], (char * const*)av[1], (char * const*)"NULL"))
+				{	
+					perror("execve");
+					exit(EXIT_FAILURE);
+				}
+				else
+					execve(nvlst[i], (char * const*)av[1], (char * const*)"NULL");
+			}
 			i++;
 		}
 	}
