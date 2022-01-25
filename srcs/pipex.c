@@ -12,7 +12,7 @@
 
 #include "../inc/pipex.h"
 
-int	main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **envp)
 {
 	char	**nvlst;
 	int	i;
@@ -21,13 +21,13 @@ int	main(int ac, char **av, char **env)
 	nvlst = NULL;
 	if (ac > 1)
 	{
-		if (!env)
+		if (!envp)
 			return (0);
-		while (env[i])
+		while (envp[i])
 		{
-			if (ft_strnstr(env[i], "PATH", 5))
+			if (ft_strnstr(envp[i], "PATH", 5))
 			{
-				nvlst = ft_split(env[i] + 5, ':');
+				nvlst = ft_split(envp[i] + 5, ':');
 				break;
 			}
 			i++;
@@ -44,17 +44,17 @@ int	main(int ac, char **av, char **env)
 		{
 			if (access(nvlst[i], F_OK))
 			{
-				if (!execve(nvlst[i], (char * const*)av[2], (char * const*)"NULL"))
+				if (!execve(nvlst[i], (char * const*)av[2], (char * const*)envp))
 				{	
 					perror("execve");
 					exit(EXIT_FAILURE);
 				}
 				else
-					execve(nvlst[i], (char * const*)av[2], (char * const*)"NULL");
+					execve(nvlst[i], (char * const*)av[2], (char * const*)envp);
 			}
 			i++;
 		}
-		ft_print_tab(nvlst);
+//		ft_print_tab(nvlst);
 		ft_free_tab(nvlst, ft_tablen(nvlst));
 	}
 	return (0);
