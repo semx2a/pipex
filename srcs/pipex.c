@@ -35,19 +35,19 @@ void	ft_print_tab(char **tab)
 	}
 }
 
-void	ft_argcat(char **tab, char *s)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		ft_strcat(tab[i], "/");
-		ft_strcat(tab[i], s);
-		i++;
-	}
-	tab[i] = 0;
-}
+//void	ft_argcat(char **tab, char *s)
+//{
+//	int	i;
+//
+//	i = 0;
+//	while (tab[i])
+//	{
+//		ft_strcat(tab[i], "/");
+//		ft_strcat(tab[i], s);
+//		i++;
+//	}
+//	tab[i] = 0;
+//}
 
 int	main(int ac, char **av, char **env)
 {
@@ -66,19 +66,24 @@ int	main(int ac, char **av, char **env)
 				nvlst = ft_split(env[i] + 5, ':');
 			i++;
 		}
-		ft_argcat(nvlst, av[1]);
+		i = 0;
+		while (nvlst[i])
+		{
+			ft_strjoin(nvlst[i], av[1]);
+			i++;
+		}
 		i = 0;
 		while (nvlst[i])
 		{
 			if (access(nvlst[i], F_OK))
 			{
-				if (!execve(nvlst[i], (char * const*)av[1], (char * const*)"NULL"))
+				if (!execve(nvlst[i], (char * const*)av[2], (char * const*)"NULL"))
 				{	
 					perror("execve");
 					exit(EXIT_FAILURE);
 				}
 				else
-					execve(nvlst[i], (char * const*)av[1], (char * const*)"NULL");
+					execve(nvlst[i], (char * const*)av[2], (char * const*)"NULL");
 			}
 			i++;
 		}
