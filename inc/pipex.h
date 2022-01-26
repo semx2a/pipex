@@ -20,8 +20,10 @@
 # include <stdio.h>
 # include "../libft/inc/libft.h"
 
-void	ft_free_tab(char **tab, long int len);
+int ft_tablen(char **tab);
+void    ft_free_tab(char **tab, long int len);
 void	ft_print_tab(char **tab);
-int	ft_tablen(char **tab);
+void	ft_exec(char **nvlst, char **argVec, char **envp);
+char	**ft_mkpath(char **nvlst, char **argVec, char **envp);
 
 #endif
