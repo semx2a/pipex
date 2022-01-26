@@ -79,6 +79,9 @@ o_dir:		o_comp
 o_comp:
 	$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS))
 
+update:
+	@git pull
+
 git:		fclean
 	@git add *
 	@git commit -m 'update'
