@@ -1,36 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   ft_print_tab.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/25 19:56:44 by seozcan           #+#    #+#             */
-/*   Updated: 2022/01/25 19:56:47 by seozcan          ###   ########.fr       */
+/*   Created: 2022/01/28 18:47:38 by seozcan           #+#    #+#             */
+/*   Updated: 2022/01/28 18:47:43 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex.h"
-
-int	ft_tablen(char **tab)
-{
-	int	len;
-
-	len = 0;
-	while (tab[len])
-		len++;
-	return (len);
-}
-
-void	ft_free_tab(char **tab, long int len)
-{
-	while (len >= 0)
-	{
-		free(tab[len]);
-		len--;
-	}
-	free(tab);
-}
+#include "../inc/libft.h"
 
 void	ft_print_tab(char **tab)
 {

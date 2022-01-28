@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 14:23:41 by seozcan           #+#    #+#             */
-/*   Updated: 2021/12/07 19:01:55 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/01/28 18:50:51 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,6 @@ static int	ft_count(char const *s, char a)
 	while (s[i] && s[i] != a)
 		i++;
 	return (i);
-}
-
-static void	ft_freed(char **d, long int j)
-{
-	while (j)
-	{
-		free(d[j]);
-		j--;
-	}
-	free(d);
 }
 
 static void	ft_substrcpy(char const *s, char a, char **d)
@@ -48,7 +38,7 @@ static void	ft_substrcpy(char const *s, char a, char **d)
 			w_count = ft_count(s + i, a);
 			d[j] = ft_substr(s + i, 0, w_count);
 			if ((long)ft_strlen(d[j]) != w_count)
-				return (ft_freed(d, j));
+				return (ft_free_tab(d, j));
 			i = i + w_count;
 			j++;
 		}

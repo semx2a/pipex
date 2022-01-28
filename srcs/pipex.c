@@ -75,7 +75,6 @@ int	main(int ac, char **av, char **envp)
 		}
 		argVec[i] = 0;
 		nvlst = ft_mkpath(nvlst, argVec, envp);
-//		ft_print_tab(nvlst);
 		ft_exec(nvlst, argVec, envp);
 		ft_free_tab(nvlst, ft_tablen(nvlst));
 		ft_free_tab(argVec, ft_tablen(argVec));
