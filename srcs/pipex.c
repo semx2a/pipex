@@ -35,11 +35,11 @@ int main(int ac, char **av, char **envp)
 		argVec = NULL;
 		argVec = ft_args(argVec, av);
 		i = 0;
-		while (i < (ft_tablen(argVec) - 1) / 2)
-		{
+//		while (i < (ft_tablen(argVec) - 1) / 2)
+//		{
 			pid = fork();
-			i++;
-		}
+//			i++;
+//		}
 		if (pid == -1)
 		{
 			perror("Fork failed");
