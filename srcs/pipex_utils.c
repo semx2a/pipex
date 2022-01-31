@@ -27,6 +27,7 @@ void	ft_exec(char *arg, char **envp)
 	char	*path;
 
 	path = ft_path(arg, envp);
+	printf("%s\n", path);
 	if (execve(path, (char * const*)arg, (char * const*)envp) < 0)
 	{	
 		perror("Could not execute execve");
@@ -47,6 +48,8 @@ char	*ft_path(char *src, char **envp)
 		if (ft_strnstr(envp[i], "PATH", 5))
 		{
 			dst = ft_split(envp[i] + 5, ':');
+			ft_print_tab(dst);
+			printf("\n");
 			i = 0;
 			while (dst[i])
 			{

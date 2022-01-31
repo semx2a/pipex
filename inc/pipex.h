@@ -21,8 +21,8 @@
 # include "../libft/inc/libft.h"
 
 int ft_tablen(char **tab);
-void    ft_child(char **argVec, char **envp);
-void    ft_mother(char **argVec, char **envp);
+void    ft_child(int *fd, char **argVec, char **envp);
+void    ft_mother(int *fd, char **argVec, char **envp);
 void	ft_exec(char *arg, char **envp);
 char	*ft_path(char *src, char **envp);
 char	*ft_path(char *src, char **envp);
