@@ -22,25 +22,59 @@ int	ft_tablen(char **tab)
 	return (len);
 }
 
-void	ft_free_tab(char **tab, long int len)
+void	ft_exec(char *arg, char **envp)
 {
-	while (len >= 0)
-	{
-		free(tab[len]);
-		len--;
+	char	*path;
+
+	path = ft_path(arg, envp);
+	if (execve(path, (char * const*)arg, (char * const*)envp) < 0)
+	{	
+		perror("Could not execute execve");
+		exit(EXIT_FAILURE);
 	}
-	free(tab);
+	free(path);
 }
 
-void	ft_print_tab(char **tab)
+char	*ft_path(char *src, char **envp)
+{
+	int	i;
+	char	**dst;
+
+	i = 0;
+	dst = NULL;
+	while (envp[i])
+	{
+		if (ft_strnstr(envp[i], "PATH", 5))
+		{
+			dst = ft_split(envp[i] + 5, ':');
+			i = 0;
+			while (dst[i])
+			{
+				dst[i] = ft_strjoin(dst[i], "/");
+				dst[i] = ft_strjoin(dst[i], src);
+				if (access(dst[i], X_OK) == 0)
+					return (dst[i]);
+				i++;
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
+char	**ft_args(char **dst, char **src)
 {
 	int	i;
 
+	dst = (char **)malloc(sizeof(char *) * ft_tablen(src));
+	if(!dst)
+		return (0);
 	i = 0;
-	while (tab[i])
+	while (src[i + 1])
 	{
-		ft_putstr_fd(tab[i], 1);
-		ft_putchar_fd('\n', 1);
+		dst[i] = src[i + 1];
 		i++;
 	}
+	dst[i] = 0;
+	return (dst);
 }

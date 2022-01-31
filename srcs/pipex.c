@@ -12,71 +12,43 @@
 
 #include "../inc/pipex.h"
 
-void	ft_exec(char **nvlst, char **argVec, char **envp)
+void ft_child(char **argVec, char **envp)
 {
-	int	i;
-
-	i = 0;
-	while (nvlst[i])
-	{
-		if (access(nvlst[i], X_OK) == 0)
-		{
-			if (execve(nvlst[i], (char * const*)argVec, (char * const*)envp) < 0)
-			{	
-				perror("Could not execute execve");
-				exit(EXIT_FAILURE);
-			}
-		}
-		i++;
-	}
+	ft_exec(argVec[], envp)
 }
 
-char	**ft_mkpath(char **nvlst, char **argVec, char **envp)
+void ft_mother(char **argVec, char **envp)
 {
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strnstr(envp[i], "PATH", 5))
-		{
-			nvlst = ft_split(envp[i] + 5, ':');
-			i = 0;
-			while (nvlst[i])
-			{
-				nvlst[i] = ft_strjoin(nvlst[i], "/");
-				nvlst[i] = ft_strjoin(nvlst[i], argVec[0]);
-				i++;
-			}
-			return (nvlst);
-		}
-		i++;
-	}
-	return (nvlst);
+	ft_exec(argVec[], envp);
 }
 
-int	main(int ac, char **av, char **envp)
+int main(int ac, char **av, char **envp)
 {
-	char	**nvlst;
-	char	**argVec;
-	int	i;
+	char **argVec;
+	int pid;
+	int i;
 
 	if (ac > 1)
 	{
 		if (!envp)
 			return (0);
-		nvlst = NULL;
-		argVec = (char **)malloc(sizeof(char *) * ft_tablen(av));
+		argVec = NULL;
+		argVec = ft_args(argVec, av);
 		i = 0;
-		while (av[i + 1])
+		while (i < (ft_tablen(argVec) - 1) / 2)
 		{
-			argVec[i] = av[i + 1];
+			pid = fork();
 			i++;
 		}
-		argVec[i] = 0;
-		nvlst = ft_mkpath(nvlst, argVec, envp);
-		ft_exec(nvlst, argVec, envp);
-		ft_free_tab(nvlst, ft_tablen(nvlst));
+		if (pid == -1)
+		{
+			perror("Fork failed");
+			exit(EXIT_FAILURE);
+		}
+		if (pid > 0)
+			ft_child(argVec, envp);
+		if (pid == 0)
+			ft_mother(argVec, envp);
 		ft_free_tab(argVec, ft_tablen(argVec));
 	}
 	return (0);
