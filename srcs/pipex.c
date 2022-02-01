@@ -61,7 +61,7 @@ void	ft_pipex(char **argVec, char **envp)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(0, NULL, 0);
+	waitpid(0, NULL, WNOHANG);
 }
 
 int main(int ac, char **av, char **envp)
@@ -75,6 +75,7 @@ int main(int ac, char **av, char **envp)
 		argVec = NULL;
 		argVec = ft_args(argVec, av);
 		ft_pipex(argVec, envp);
+//		ft_exec(argVec[0], envp);
 		ft_free_tab(argVec, ft_tablen(argVec));
 	}
 	return (0);

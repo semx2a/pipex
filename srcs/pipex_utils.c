@@ -25,10 +25,11 @@ int	ft_tablen(char **tab)
 void	ft_exec(char *arg, char **envp)
 {
 	char	*path;
+	char	**cmd;
 
-	path = ft_path(arg, envp);
-	printf("%s\n", path);
-	if (execve(path, (char * const*)arg, (char * const*)envp) < 0)
+	cmd = ft_split(arg, ' ');
+	path = ft_path(cmd[0], envp);
+	if (execve(path, (char * const*)cmd, (char * const*)envp) == -1)
 	{	
 		perror("Could not execute execve");
 		exit(EXIT_FAILURE);
@@ -48,8 +49,6 @@ char	*ft_path(char *src, char **envp)
 		if (ft_strnstr(envp[i], "PATH", 5))
 		{
 			dst = ft_split(envp[i] + 5, ':');
-			ft_print_tab(dst);
-			printf("\n");
 			i = 0;
 			while (dst[i])
 			{
