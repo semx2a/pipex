@@ -12,18 +12,18 @@
 
 #include "../inc/pipex.h"
 
-void ft_child(int *fd, char **argVec, char **envp)
+void ft_child(int **fd, char **argVec, char **envp, int pos)
 {
 	int i;
 
 	i = 0;
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[0]);
-	close(fd[1]);
+	dup2(fd[i][1], STDOUT_FILENO);
+	close(fd[i][0]);
+	close(fd[i + 1][1]);
 	ft_exec(argVec[i], envp);
 }
 
-void ft_mother(int *fd, char **argVec, char **envp)
+void ft_mother(int **fd, char **argVec, char **envp)
 {
 	int i;
 
@@ -36,25 +36,30 @@ void ft_mother(int *fd, char **argVec, char **envp)
 
 void	ft_pipex(char **argVec, char **envp)
 {
-	int pid1;
-	int	pid2;
-	int	fd[2];
+	int *pid;
+	int	**fd;
+	int	i;
 
-	if (pipe(fd[0]) < 0)
-		ft_error("Pipe returned an error.\n");
-	if ((pid1 = fork() < 0))
-		ft_error("Fork1 failed.\n");
-	if (pid1 == 0)
-		ft_child(fd, argVec, envp);	
-	if ((pid2 = fork() < 0))
-		ft_error("Fork2 failed.\n");
-	if (pid1 == 0)
-		ft_child(fd, argVec, envp);
-	waitpid(pid1, NULL, WNOHANG);	
-	waitpid(pid2, NULL, WNOHANG);
-	close(fd[0][0]);
-	close(fd[1][1]);
+	i = 0;
+	while (i <= ft_tablen(argVec) - 1)
+	{
+		if (pipe(fd[i]) < 0)
+			ft_error("Pipe returned an error.");
+		i++;
+	}
+	i = 0;
+	while (i <= ft_tablen(argVec) - 2)
+	{
+		if ((pid[i] = fork() < 0))
+			ft_error("Fork failed.");
+		if (pid[i] == 0)
+			ft_child(fd, argVec, envp, i);
+		i++;
+	}
 	ft_mother(fd, argVec, envp);
+	close(fd[i][0]);
+	close(fd[i][1]);
+	waitpid(0, NULL, WNOHANG);
 }
 
 int main(int ac, char **av, char **envp)

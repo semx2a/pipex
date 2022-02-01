@@ -22,6 +22,12 @@ int	ft_tablen(char **tab)
 	return (len);
 }
 
+void	ft_error(char *str)
+{
+	perror(str);
+	exit(EXIT_FAILURE);
+}
+
 void	ft_exec(char *arg, char **envp)
 {
 	char	*path;
@@ -30,11 +36,7 @@ void	ft_exec(char *arg, char **envp)
 	cmd = ft_split(arg, ' ');
 	path = ft_path(cmd[0], envp);
 	if (execve(path, (char * const*)cmd, (char * const*)envp) == -1)
-	{	
-		perror("Could not execute execve");
-		exit(EXIT_FAILURE);
-	}
-	free(path);
+		ft_error("Could not execute path.")
 }
 
 char	*ft_path(char *src, char **envp)
@@ -64,7 +66,7 @@ char	*ft_path(char *src, char **envp)
 	return (0);
 }
 
-char	**ft_args(char **dst, char **src)
+char	**ft_tabcpy(char **dst, char **src)
 {
 	int	i;
 
@@ -72,9 +74,9 @@ char	**ft_args(char **dst, char **src)
 	if(!dst)
 		return (0);
 	i = 0;
-	while (src[i + 1])
+	while (src[i])
 	{
-		dst[i] = src[i + 1];
+		dst[i] = src[i];
 		i++;
 	}
 	dst[i] = 0;
