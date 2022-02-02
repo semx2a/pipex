@@ -25,8 +25,8 @@ typedef struct s_obj
     int fd_in;
     int fd_out;
     int fd_pipe[2];
-    int pid1;
-    int pid2;
+    pid_t pid1;
+    pid_t pid2;
     char    **argVec;
 
 }  t_obj;

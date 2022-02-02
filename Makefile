@@ -82,7 +82,7 @@ o_comp:
 update:
 	@git pull
 
-git:		fclean
+git:
 	@git add *
 	@git commit -m 'update'
 	@git push
