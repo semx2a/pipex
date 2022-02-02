@@ -28,7 +28,6 @@ typedef struct s_obj
     pid_t pid1;
     pid_t pid2;
     char    **argVec;
-
 }  t_obj;
 
 int ft_tablen(char **tab);
