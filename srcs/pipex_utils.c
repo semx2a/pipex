@@ -36,7 +36,7 @@ void	ft_exec(char *arg, char **envp)
 	cmd = ft_split(arg, ' ');
 	path = ft_path(cmd[0], envp);
 	if (execve(path, (char * const*)cmd, (char * const*)envp) == -1)
-		ft_error("Could not execute path.")
+		ft_error("Could not execute path.");
 }
 
 char	*ft_path(char *src, char **envp)

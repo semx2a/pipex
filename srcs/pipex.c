@@ -12,63 +12,58 @@
 
 #include "../inc/pipex.h"
 
-void ft_child(int *fd, char **argVec, char **envp)
+void ft_child(t_obj obj, char **envp)
 {
-	int i;
-
-	i = 0;
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[0]);
-	close(fd[1]);
-	ft_exec(argVec[i], envp);
+	dup2(obj.fd_in, 0);
+	dup2(obj.fd_pipe[1], 1);
+	close(obj.fd_pipe[0]);
+	close(obj.fd_pipe[1]);
+	ft_exec(obj.argVec[0], envp);
 }
 
-void ft_mother(int *fd, char **argVec, char **envp)
+void ft_mother(t_obj obj, char **envp)
 {
-	int i;
-
-	i = 1;
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[1]);
-	close(fd[0]);
-	ft_exec(argVec[i], envp);
+	dup2(obj.fd_out, 1);
+	dup2(obj.fd_pipe[0], 0);
+	close(obj.fd_pipe[0]);
+	close(obj.fd_pipe[1]);
+	ft_exec(obj.argVec[1], envp);
 }
 
-void	ft_pipex(char **argVec, char **envp)
+void ft_pipex(t_obj obj, char **envp)
 {
-	int pid1;
-	int	pid2;
-	int	fd[2];
-
-	if (pipe(fd[0]) < 0)
+	if (pipe(obj.fd_pipe) < 0)
 		ft_error("Pipe returned an error.\n");
-	if ((pid1 = fork() < 0))
+	if ((obj.pid1 = fork() < 0))
 		ft_error("Fork1 failed.\n");
-	if (pid1 == 0)
-		ft_child(fd, argVec, envp);	
-	if ((pid2 = fork() < 0))
+	if (obj.pid1 == 0)
+		ft_child(obj, envp);
+	if ((obj.pid2 = fork() < 0))
 		ft_error("Fork2 failed.\n");
-	if (pid1 == 0)
-		ft_child(fd, argVec, envp);
-	waitpid(pid1, NULL, WNOHANG);	
-	waitpid(pid2, NULL, WNOHANG);
-	close(fd[0][0]);
-	close(fd[1][1]);
-	ft_mother(fd, argVec, envp);
+	if (obj.pid2 == 0)
+		ft_mother(obj, envp);
+	close(obj.fd_pipe[0]);
+	close(obj.fd_pipe[1]);
+	waitpid(obj.pid1, NULL, 0);
+	waitpid(obj.pid2, NULL, 0);
 }
 
 int main(int ac, char **av, char **envp)
 {
-	char **argVec;
-	
+	t_obj obj;
+
 	if (ac > 1)
 	{
 		if (!envp)
 			return (0);
-		argVec = NULL;
-		argVec = ft_tabcpy(argVec, av + 1);
-		ft_pipex(argVec, envp);
-		ft_free_tab(argVec, ft_tablen(argVec));
+		obj.argVec = NULL;
+		obj.argVec = ft_tabcpy(obj.argVec, av + 1);
+		if (obj.fd_in = open(obj.argVec[0], O_RDONLY) < 0)
+			ft_error("Could not open input file.");
+		if (obj.fd_out = open(obj.argVec[ft_tablen(obj.argVec) - 1], O_CREAT | O_TRUNC | O_WRONLY) < 0)
+			ft_error("Could not create output file.");
+		ft_pipex(obj, envp);
+		ft_free_tab(obj.argVec, ft_tablen(obj.argVec));
 	}
 	return (0);
 }

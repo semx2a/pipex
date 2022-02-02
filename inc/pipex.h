@@ -20,10 +20,21 @@
 # include <stdio.h>
 # include "../libft/inc/libft.h"
 
+typedef struct s_obj
+{
+    int fd_in;
+    int fd_out;
+    int fd_pipe[2];
+    int pid1;
+    int pid2;
+    char    **argVec;
+
+}  t_obj;
+
 int ft_tablen(char **tab);
 void	ft_error(char *str);
-void	ft_exec(char *arg, char **envp);
-char	*ft_path(char *src, char **envp);
+void	ft_exec(char *arg, char **nviron);
+char	*ft_path(char *src, char **nviron);
 char	**ft_tabcpy(char **dst, char **src);
 
 #endif
