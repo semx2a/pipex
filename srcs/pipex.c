@@ -66,11 +66,14 @@ int main(int ac, char **av, char **envp)
 			return (0);
 		obj.argVec = NULL;
 		obj.argVec = ft_tabcpy(obj.argVec, av + 1);
-		if ((obj.fd_in = open(obj.argVec[0], O_RDONLY) < 0))
+		obj.fd_in = open(obj.argVec[0], O_RDONLY);
+		if (obj.fd_in <= 0)
 			ft_error("Could not open input file.");
-		if ((obj.fd_out = open(obj.argVec[ft_tablen(obj.argVec) - 1],
-							   O_CREAT | O_TRUNC | O_WRONLY) < 0))
+//		printf("fd_in[%i] : %s\n", obj.fd_in, obj.argVec[0]);	
+		obj.fd_out = open(obj.argVec[ft_tablen(obj.argVec) - 1], O_CREAT | O_TRUNC | O_WRONLY);
+		if (obj.fd_out <= 0)
 			ft_error("Could not create output file.");
+//		printf("fd_out[%i] : %s\n", obj.fd_out, obj.argVec[ft_tablen(obj.argVec) - 1]);
 		ft_pipex(obj, envp);
 		ft_free_tab(obj.argVec, ft_tablen(obj.argVec));
 	}
