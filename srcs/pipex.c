@@ -12,70 +12,68 @@
 
 #include "../inc/pipex.h"
 
-void ft_cmd1(t_obj obj, char **envp)
-{
-	if ((obj.pid1 = fork() < 0))
-		ft_error("Fork1 failed.\n");
-	if (obj.pid1 == 0)
-	{
-		dup2(obj.fd_in, STDIN_FILENO);
-		close(obj.fd_in);
-		dup2(obj.fd_pipe[1], STDOUT_FILENO);
-		close(obj.fd_pipe[1]);
-		close(obj.fd_pipe[0]);
-		ft_exec(obj.argVec[1], envp);
-	}
-}
+//void ft_mutha(t_obj obj, char *av, char **envp)
+//{
+//	if ((obj.pid2 = fork() < 0))
+//		ft_error("Fork2 failed.\n");
+//	if (obj.pid2 == 0)
+//	{
+//		dup2(obj.fd_out, STDOUT_FILENO);
+//		close(obj.fd_out);
+//		close(obj.fd_in);
+//		close(obj.fd_pipe[0]);
+//		close(obj.fd_pipe[1]);
+//		ft_exec(av, envp);
+//	}
+//}
 
-void ft_cmd2(t_obj obj, char **envp)
+void ft_pipe(t_obj obj, char *av, char **envp)
 {
-	if ((obj.pid2 = fork() < 0))
-		ft_error("Fork2 failed.\n");
-	if (obj.pid2 == 0)
-	{
-		dup2(obj.fd_out, STDOUT_FILENO);
-		close(obj.fd_out);
-		dup2(obj.fd_pipe[0], STDIN_FILENO);
-		close(obj.fd_pipe[0]);
-		close(obj.fd_pipe[1]);
-		ft_exec(obj.argVec[2], envp);
-	}
-}
-
-void ft_pipex(t_obj obj, char **envp)
-{
-	if (pipe(obj.fd_pipe) < 0)
+	if (pipe(obj.fd_pipe) == -1)
 		ft_error("Pipe returned an error.\n");
-	ft_cmd1(obj, envp);
-	ft_cmd2(obj, envp);
-	close(obj.fd_in);
-	close(obj.fd_out);
-	close(obj.fd_pipe[0]);
-	close(obj.fd_pipe[1]);
-	waitpid(obj.pid1, NULL, 0);
-	waitpid(obj.pid2, NULL, 0);
+	if ((obj.pid = fork()) >= 0)
+	{
+		if (obj.pid == 0)
+		{
+			close(obj.fd_pipe[0]);
+			dup2(obj.fd_pipe[1], STDOUT_FILENO);
+			ft_exec(av, envp);
+		}
+		else
+		{
+			waitpid(0, NULL, 0);
+			close(obj.fd_pipe[1]);
+			dup2(obj.fd_pipe[0], STDIN_FILENO);
+		}
+	}
+	else
+		ft_error("Fork failed.\n");
 }
 
 int main(int ac, char **av, char **envp)
 {
 	t_obj obj;
+	int i;
 
-	if (ac > 1)
+	i = 2;
+	if (ac >= 5)
 	{
-		if (!envp)
-			return (0);
-		obj.argVec = NULL;
-		obj.argVec = ft_tabcpy(obj.argVec, av + 1);
-		obj.fd_in = open(obj.argVec[0], O_RDONLY);
-		if (obj.fd_in <= 0)
-			ft_error("Could not open input file.");
-//		printf("fd_in[%i] : %s\n", obj.fd_in, obj.argVec[0]);	
-		obj.fd_out = open(obj.argVec[ft_tablen(obj.argVec) - 1], O_CREAT | O_TRUNC | O_WRONLY);
-		if (obj.fd_out <= 0)
+		if (*envp == NULL)
+			ft_error("Empty environment");
+		obj.fd_in = open(av[1], O_RDONLY);
+		if(obj.fd_in == -1)
+			ft_error("Could not read input file.");
+		obj.fd_out = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0755);
+		if (obj.fd_out == -1)
 			ft_error("Could not create output file.");
-//		printf("fd_out[%i] : %s\n", obj.fd_out, obj.argVec[ft_tablen(obj.argVec) - 1]);
-		ft_pipex(obj, envp);
-		ft_free_tab(obj.argVec, ft_tablen(obj.argVec));
+		dup2(obj.fd_in, STDIN_FILENO);
+		close (obj.fd_in);
+		while (i < (ac - 2))
+			ft_pipe(obj, av[i++], envp);
+		dup2(obj.fd_out, STDOUT_FILENO);
+		close(obj.fd_out);
+		ft_exec(av[ac - 2], envp);
 	}
+	ft_error("Please enter at least five arguments.");
 	return (0);
 }

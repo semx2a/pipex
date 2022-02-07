@@ -25,15 +25,13 @@ typedef struct s_obj
     int fd_in;
     int fd_out;
     int fd_pipe[2];
-    pid_t pid1;
-    pid_t pid2;
-    char    **argVec;
+    pid_t pid;
 }  t_obj;
 
 int ft_tablen(char **tab);
 void	ft_error(char *str);
-void	ft_exec(char *arg, char **nviron);
-char	*ft_path(char *src, char **nviron);
+void	ft_exec(char *arg, char **envp);
+char	*ft_path(char *src, char **envp);
 char	**ft_tabcpy(char **dst, char **src);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:24:57 by seozcan           #+#    #+#             */
-/*   Updated: 2022/01/28 18:49:02 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/02/07 13:50:33 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		ft_isalnum(int c);
 int		ft_atoi(const char *str);
 int		ft_lstsize(t_list *lst);
 int		ft_atoi_base(char *str, char *base);
+int		ft_tablen(char **tab);
 void	ft_bzero(void *s, size_t n);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 void	ft_putchar_fd(char c, int fd);
@@ -75,6 +76,7 @@ char	*ft_strcat(char *dst, char *src);
 char	*ft_strcpy(char *dst, char *src);
 char	*ft_strncpy(char *dst, char *src, unsigned int n);
 char	**ft_split(char const *s, char c);
+char	**ft_tabcpy(char **dst, char **src);
 size_t	ft_strlen(const char *str);
 size_t	ft_strlcpy(char *dest, char *src, size_t destsize);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);

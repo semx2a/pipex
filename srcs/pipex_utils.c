@@ -12,21 +12,12 @@
 
 #include "../inc/pipex.h"
 
-int	ft_tablen(char **tab)
-{
-	int	len;
-
-	len = 0;
-	while (tab[len])
-		len++;
-	return (len);
-}
-
 void	ft_error(char *str)
 {
 	perror(str);
 	exit(EXIT_FAILURE);
 }
+
 
 void	ft_exec(char *arg, char **envp)
 {
@@ -46,39 +37,17 @@ char	*ft_path(char *src, char **envp)
 
 	i = 0;
 	dst = NULL;
-	while (envp[i])
+	while (ft_strnstr(envp[i], "PATH", 5) == 0)
+		i++;
+	dst = ft_split(envp[i] + 5, ':');
+	i = 0;
+	while (dst[i])
 	{
-		if (ft_strnstr(envp[i], "PATH", 5))
-		{
-			dst = ft_split(envp[i] + 5, ':');
-			i = 0;
-			while (dst[i])
-			{
-				dst[i] = ft_strjoin(dst[i], "/");
-				dst[i] = ft_strjoin(dst[i], src);
-				if (access(dst[i], X_OK) == 0)
-					return (dst[i]);
-				i++;
-			}
-		}
+		dst[i] = ft_strjoin(dst[i], "/");
+		dst[i] = ft_strjoin(dst[i], src);
+		if (access(dst[i], X_OK) == 0)
+			return (dst[i]);
 		i++;
 	}
 	return (0);
-}
-
-char	**ft_tabcpy(char **dst, char **src)
-{
-	int	i;
-
-	dst = (char **)malloc(sizeof(char *) * ft_tablen(src));
-	if(!dst)
-		return (0);
-	i = 0;
-	while (src[i])
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = 0;
-	return (dst);
 }
