@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <stdio.h>
+# include <errno.h>
 # include "../libft/inc/libft.h"
 
 typedef struct s_obj

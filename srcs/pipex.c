@@ -15,9 +15,9 @@
 void ft_pipe(t_obj obj, char *av, char **envp)
 {
 	if (pipe(obj.fd_pipe) == -1)
-		ft_error("Pipe returned an error.\n");
+		ft_error("Pipe returned an error");
 	if ((obj.pid = fork()) < 0)
-		ft_error("Fork failed.\n");
+		ft_error("Fork failed");
 	if (obj.pid == 0)
 	{
 		close(obj.fd_pipe[0]);
@@ -44,10 +44,10 @@ int main(int ac, char **av, char **envp)
 			ft_error("Empty environment");
 		obj.fd_in = open(av[1], O_RDONLY);
 		if(obj.fd_in == -1)
-			ft_error("Could not read input file.");
+			ft_error("Could not read input file");
 		obj.fd_out = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0755);
 		if (obj.fd_out == -1)
-			ft_error("Could not create output file.");
+			ft_error("Could not create output file");
 		dup2(obj.fd_in, STDIN_FILENO);
 		close (obj.fd_in);
 		while (i < (ac - 2))
@@ -56,6 +56,6 @@ int main(int ac, char **av, char **envp)
 		close(obj.fd_out);
 		ft_exec(av[ac - 2], envp);
 	}
-	ft_error("Please enter at least five arguments.");
+	ft_error("usage: ./pipex file1 cmd1 cmd2 ... cmdn file2");
 	return (0);
 }
