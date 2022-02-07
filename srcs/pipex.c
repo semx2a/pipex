@@ -12,42 +12,24 @@
 
 #include "../inc/pipex.h"
 
-//void ft_mutha(t_obj obj, char *av, char **envp)
-//{
-//	if ((obj.pid2 = fork() < 0))
-//		ft_error("Fork2 failed.\n");
-//	if (obj.pid2 == 0)
-//	{
-//		dup2(obj.fd_out, STDOUT_FILENO);
-//		close(obj.fd_out);
-//		close(obj.fd_in);
-//		close(obj.fd_pipe[0]);
-//		close(obj.fd_pipe[1]);
-//		ft_exec(av, envp);
-//	}
-//}
-
 void ft_pipe(t_obj obj, char *av, char **envp)
 {
 	if (pipe(obj.fd_pipe) == -1)
 		ft_error("Pipe returned an error.\n");
-	if ((obj.pid = fork()) >= 0)
+	if ((obj.pid = fork()) < 0)
+		ft_error("Fork failed.\n");
+	if (obj.pid == 0)
 	{
-		if (obj.pid == 0)
-		{
-			close(obj.fd_pipe[0]);
-			dup2(obj.fd_pipe[1], STDOUT_FILENO);
-			ft_exec(av, envp);
-		}
-		else
-		{
-			waitpid(0, NULL, 0);
-			close(obj.fd_pipe[1]);
-			dup2(obj.fd_pipe[0], STDIN_FILENO);
-		}
+		close(obj.fd_pipe[0]);
+		dup2(obj.fd_pipe[1], STDOUT_FILENO);
+		ft_exec(av, envp);
 	}
 	else
-		ft_error("Fork failed.\n");
+	{
+		waitpid(0, NULL, 0);
+		close(obj.fd_pipe[1]);
+		dup2(obj.fd_pipe[0], STDIN_FILENO);
+	}
 }
 
 int main(int ac, char **av, char **envp)

@@ -43,11 +43,19 @@ char	*ft_path(char *src, char **envp)
 	i = 0;
 	while (dst[i])
 	{
-		dst[i] = ft_strjoin(dst[i], "/");
+		if (src[0] == '.' && src[1] == '/')
+		{
+			free(dst);
+			dst[i] = ft_strdup("./");
+		}
+		else
+			dst[i] = ft_strjoin(dst[i], "/");
 		dst[i] = ft_strjoin(dst[i], src);
 		if (access(dst[i], X_OK) == 0)
 			return (dst[i]);
 		i++;
 	}
+	ft_free_tab(dst, ft_tablen(dst));
+	ft_error("Could not find path.");
 	return (0);
 }
