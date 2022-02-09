@@ -12,54 +12,41 @@
 
 #include "../inc/pipex.h"
 
-void	ft_error(char *str)
+void	ft_error(const char *str)
 {
 	perror(str);
-	exit(EXIT_FAILURE);
+	strerror(errno);
+	exit(errno);
 }
 
-
-void	ft_exec(char *arg, char **envp)
+void	ft_exec(t_obj obj, char *arg, char **envp)
 {
-	char	*path;
-	char	**cmd;
-
-	cmd = ft_split(arg, ' ');
-	if ((access(cmd[0], X_OK)) == 0)
-		path = ft_strdup(cmd[0]);
-	else
-		path = ft_path(cmd[0], envp);
-	if (execve(path, (char * const*)cmd, (char * const*)envp) == -1)
-	{
-		ft_free_tab(cmd, ft_tablen(cmd));
-		free(path);
-		ft_error("Could not execute path");
-	}
+	obj.cmd = ft_split(arg, ' ');
+	execve(obj.cmd[0], (char * const*)obj.cmd, (char * const*)envp);
+	execve((ft_path(obj.cmd[0], envp)), (char * const*)obj.cmd, (char * const*)envp);
+	ft_free_tab(obj.cmd, ft_tablen(obj.cmd));
+	ft_error("Command not found");
 }
 
 char	*ft_path(char *src, char **envp)
 {
 	int	i;
-	char	**dst;
+	char	**tmp;
+	char	*dst;
 
 	i = 0;
-	dst = NULL;
+	tmp = NULL;
 	while (ft_strnstr(envp[i], "PATH", 5) == 0)
 		i++;
-	dst = ft_split(envp[i] + 5, ':');
+	tmp = ft_split(envp[i] + 5, ':');
 	i = 0;
-	while (dst[i])
+	while (tmp[i])
 	{
-		dst[i] = ft_strjoin(dst[i], "/");
-		dst[i] = ft_strjoin(dst[i], src);
-		if (access(dst[i], X_OK) == 0)
-			return (dst[i]);
-		else if (!dst[i + 1])
-		{
-			ft_free_tab(dst, ft_tablen(dst));
-			ft_error("Command not found");
-		}
+		tmp[i] = ft_strjoin(tmp[i], "/");
+		dst = ft_strjoin(tmp[i], src);
+		if (access(dst, X_OK) == 0)
+			return (dst);
 		i++;
 	}
-	return (0);
+	return ("null");
 }

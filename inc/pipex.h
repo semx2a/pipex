@@ -27,11 +27,12 @@ typedef struct s_obj
     int fd_out;
     int fd_pipe[2];
     pid_t pid;
+    char    **cmd;
 }  t_obj;
 
 int ft_tablen(char **tab);
-void	ft_error(char *str);
-void	ft_exec(char *arg, char **envp);
+void	ft_error(const char *str);
+void	ft_exec(t_obj obj, char *arg, char **envp);
 char	*ft_path(char *src, char **envp);
 char	**ft_tabcpy(char **dst, char **src);
 

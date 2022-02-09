@@ -22,18 +22,19 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	i = 0;
 	slen = ft_strlen(s);
-	if (slen <= start)
+	if (start >= slen)
+	{
 		d = (char *)malloc(sizeof(char) * 1);
-	else if (len > slen)
+		d[i] = '\0';
+		return (d);
+	}
+	else if (len >= slen)
 		d = (char *)malloc(sizeof(char) * ((slen - start) + 1));
 	else
 		d = (char *)malloc(sizeof(char) * (len + 1));
 	if (!d)
-	{	
-		free(d);
 		return (NULL);
-	}
-	while (len-- && slen >= start)
+	while (len-- && s[start])
 		d[i++] = s[start++];
 	d[i] = '\0';
 	return (d);

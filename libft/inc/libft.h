@@ -53,7 +53,7 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 void	ft_print_tab(char **tab);
-void	ft_free_tab(char **tab, long int len);
+void	ft_free_tab(char **tab, int len);
 void	*ft_memset(void *b, int c, size_t len);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
