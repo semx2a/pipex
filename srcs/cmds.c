@@ -2,7 +2,7 @@
 
 char	*ft_paths(char **envp)
 {
-	while (ft_strnstr(*envp, "PATH", 4))
+	while (!(ft_strnstr(*envp, "PATH", 5)))
 		envp++;
 	return(*envp + 5);
 }
@@ -12,7 +12,7 @@ char	*get_cmd(char **paths, char *cmd)
 	char *tmp;
 	char *ret;
 	
-	if (access(cmd, X_OK))
+	if (access(cmd, 0) == 0)
 			return (cmd);
 	else
 	{
@@ -20,12 +20,12 @@ char	*get_cmd(char **paths, char *cmd)
 		{
 			tmp = ft_strjoin(*paths, "/");
 			ret = ft_strjoin(tmp, cmd);
-			free(tmp);
-			if (access(ret, X_OK) == -1)
+			if (access(ret, 0) == 0)
 				return (ret);
 			free(ret);
 			paths++;
 		}
+		ft_error("get_cmd");
 	}
 	return (NULL);
 }

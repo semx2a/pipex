@@ -63,27 +63,7 @@ char	**ft_split(char const *s, char a)
 	d = (char **)malloc(sizeof(char *) * (t_count + 1));
 	if (!d)
 		return (NULL);
-	d[t_count] = 0;
 	ft_substrcpy(s, a, d);
+	d[t_count] = 0;
 	return (d);
 }
-
-//int	main(int ac, char **av)
-//{
-//	int i;
-//	char **ret;
-//
-//	if (ac == 2)
-//	{
-//		i = 0;
-//		ret = ft_split(av[1], ':');
-//		while (ret[i])
-//		{
-//			printf("%s\n", ret[i]);
-//			free(ret[i]);
-//			i++;
-//		}
-//	}
-//	printf("\n");
-//	return (0);
-//}
