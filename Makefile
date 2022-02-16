@@ -24,9 +24,19 @@ SDIR	= srcs/
 
 ODIR	= objs/
 
-SRCS	= pipex.c pipex_utils.c
+SRCS	= pipex.c utils.c cmds.c
 
 OBJS	= ${SRCS:.c=.o}
+
+# -------------------------- #
+#         FUNCTIONS          #
+# -------------------------- #
+
+FDIR	= fcts/
+
+FT_C	= ft_split.c ft_strjoin.c ft_strlen.c ft_strnstr.c ft_substr.c
+
+F_OBJS	= ${FT_C:.c=.o}
 
 # -------------------------- #
 #         COMPILERS          #
@@ -60,8 +70,8 @@ LIB		= libft.a
 #          SCRIPTS           #
 # -------------------------- #
 
-$(NAME):	%: m_lib 
-	$(CC) -o $(NAME) $(addprefix $(ODIR), $(OBJS)) $(addprefix $(LDIR), $(LIB)) && make clean 
+$(NAME):	%: o_dir 
+	$(CC) -o $(NAME) $(addprefix $(ODIR), $(OBJS)) $(addprefix $(ODIR), $(F_OBJS)) && make clean 
 
 # -------------------------- #
 #           RULES            #
@@ -69,15 +79,12 @@ $(NAME):	%: m_lib
 
 all:		${NAME}
 
-m_lib:		o_dir
-	@make -C $(LDIR)
-
 o_dir:		o_comp
 	@mkdir $(ODIR)
-	@mv $(OBJS) $(ODIR)
+	@mv $(OBJS) $(F_OBJS) $(ODIR)
 
 o_comp:
-	$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS))
+	$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS)) $(addprefix $(FDIR), $(FT_C))
 
 update:
 	@git pull
@@ -89,11 +96,9 @@ git:
 
 clean:
 	@rm -rf $(ODIR)
-	@make -C $(LDIR) clean
 
 fclean:		clean
 	@rm ${NAME}
-	@make -C $(LDIR) fclean
 
 re:			fclean all
 

@@ -12,41 +12,40 @@
 
 #include "../inc/pipex.h"
 
-void	ft_error(const char *str)
+void ft_error(const char *str)
 {
 	perror(str);
 	strerror(errno);
 	exit(errno);
 }
 
-void	ft_exec(t_obj obj, char *arg, char **envp)
+int	ft_tablen(char **tab)
 {
-	obj.cmd = ft_split(arg, ' ');
-	execve(obj.cmd[0], (char * const*)obj.cmd, (char * const*)envp);
-	execve((ft_path(obj.cmd[0], envp)), (char * const*)obj.cmd, (char * const*)envp);
-	ft_free_tab(obj.cmd, ft_tablen(obj.cmd));
-	ft_error("Command not found");
+	int	len;
+
+	len = 0;
+	while (tab[len] != 0)
+		len++;
+	return (len);
 }
 
-char	*ft_path(char *src, char **envp)
+void    ft_free_child(char **args, char *arg)
 {
-	int	i;
-	char	**tmp;
-	char	*dst;
+	while (*args != 0)
+		free(*args++);
+	free(args);
+	free(arg);
+}
+
+void    ft_free_parent(char **args)
+{
+	int i;
 
 	i = 0;
-	tmp = NULL;
-	while (ft_strnstr(envp[i], "PATH", 5) == 0)
-		i++;
-	tmp = ft_split(envp[i] + 5, ':');
-	i = 0;
-	while (tmp[i])
+	while (args[i] != 0)
 	{
-		tmp[i] = ft_strjoin(tmp[i], "/");
-		dst = ft_strjoin(tmp[i], src);
-		if (access(dst, X_OK) == 0)
-			return (dst);
+		free(args[i]);
 		i++;
 	}
-	return ("null");
+	free(args);
 }
