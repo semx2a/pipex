@@ -34,9 +34,19 @@ OBJS	= ${SRCS:.c=.o}
 
 FDIR	= fcts/
 
-FT_C	= ft_split.c ft_strjoin.c ft_strlen.c ft_strnstr.c ft_substr.c
+FT_C	= ft_split.c ft_strjoin.c ft_strnstr.c ft_substr.c
 
 F_OBJS	= ${FT_C:.c=.o}
+
+#----------------------------#
+#		  FT_PRINTF			 #
+#----------------------------#
+
+PFDIR	= ft_printf/
+
+PFSRC	= ft_numbers.c ft_printf.c ft_strings.c 
+
+PFOBJS	= $(PFSRC:.c=.o)
 
 # -------------------------- #
 #         COMPILERS          #
@@ -66,20 +76,13 @@ LDIR 	= libft/
 
 LIB		= libft.a
 
-#----------------------------#
-#		  FT_PRINTF			 #
-#----------------------------#
-
-PFDIR	= ft_printf/
-
-PFLIB	= libftprintf.a
 
 # -------------------------- #
 #          SCRIPTS           #
 # -------------------------- #
 
-$(NAME):	%: mk_pf o_dir
-	$(CC) -o $(NAME) $(addprefix $(ODIR), $(OBJS)) $(addprefix $(ODIR), $(F_OBJS)) && make clean 
+$(NAME):	%: o_dir
+	$(CC) -o $(NAME) $(addprefix $(ODIR), $(OBJS)) $(addprefix $(ODIR), $(F_OBJS)) $(addprefix $(ODIR), $(PFOBJS)) && make clean 
 
 # -------------------------- #
 #           RULES            #
@@ -87,15 +90,12 @@ $(NAME):	%: mk_pf o_dir
 
 all:		${NAME}
 
-mk_pf:
-	@make -C $(PFDIR)
-
 o_dir:		o_comp
 	@mkdir $(ODIR)
-	@mv $(OBJS) $(F_OBJS) $(ODIR)
+	@mv $(OBJS) $(F_OBJS) $(PFOBJS) $(ODIR)
 
 o_comp:
-	$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS)) $(addprefix $(FDIR), $(FT_C)) -L $(addprefix $(PFDIR), $(PFLIB))
+	$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS)) $(addprefix $(FDIR), $(FT_C)) $(addprefix $(PFDIR), $(PFSRC))
 
 update:
 	@git pull
@@ -107,11 +107,9 @@ git:
 
 clean:
 	@rm -rf $(ODIR)	
-	@make -C $(FT_PF) clean
 
 fclean:
 	@rm ${NAME}
-	@make -C $(FT_PF) fclean
 
 re:			fclean all
 
