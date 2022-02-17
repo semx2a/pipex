@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <errno.h>
 # include <string.h>
+# include "../ft_printf/inc/ft_printf.h"
 
 typedef struct s_obj
 {
@@ -49,6 +50,5 @@ char	**ft_split(char const *s, char a);
 char    *ft_substr(char const *s, char *d, size_t start, size_t len);
 size_t	ft_strlen(const char *str);
 char	*ft_strdup(const char *s1);
-void ft_werror(int wstatus);
 
 #endif

@@ -46,8 +46,6 @@ void ft_outfile(t_obj obj, char *av, char **envp)
 
 void ft_pipe(t_obj obj, char **av, char **envp)
 {
-	int wstatus;
-
     if (pipe(obj.fd_pipe) == -1)
 		ft_error("Pipe failed");
 	if ((obj.pid1 = fork()) == -1)
@@ -62,8 +60,6 @@ void ft_pipe(t_obj obj, char **av, char **envp)
     close(obj.fd_pipe[1]);
 	waitpid(obj.pid1, NULL, 0);	
     waitpid(obj.pid2, NULL, 0);
-    wait(&wstatus);
-	ft_werror(wstatus);
 }
 
 int main(int ac, char **av, char **envp)

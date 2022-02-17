@@ -14,8 +14,11 @@
 
 void ft_error(const char *str)
 {
-	perror(str);
-	strerror(errno);
+	(void)str;
+
+	ft_printf("Value of errno: %d\n", errno);
+	ft_printf("Error opening the file: %s\n", strerror(errno));
+	perror("Error printed by perror");
 	exit(EXIT_FAILURE);
 }
 

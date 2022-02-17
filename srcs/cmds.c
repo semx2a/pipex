@@ -25,7 +25,7 @@ char	*get_cmd(char **paths, char *cmd)
 			free(ret);
 			paths++;
 		}
-		ft_error("get_cmd");
+		ft_error("Command not found");
 	}
 	return (NULL);
 }
