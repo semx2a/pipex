@@ -25,7 +25,8 @@ typedef struct s_obj
 {
     int fd_in;
     int fd_out;
-    int fd_pipe[2];
+    int *fd_pipe;
+    int n_pipe;
     pid_t pid1;
     pid_t pid2;
     char    *cmd;
@@ -37,7 +38,8 @@ typedef struct s_obj
 int ft_tablen(char **tab);
 int	ft_tablen(char **tab);
 void	ft_error(const char *str);
-void	ft_close(int **fd_pipe, int len);
+void	ft_close(t_obj obj);
+void	get_pipes(t_obj obj);
 void    ft_free_child(char **args, char *arg);
 void    ft_free_parent(char **args);
 char	*ft_paths(char **envp);

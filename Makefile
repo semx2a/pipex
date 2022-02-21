@@ -81,7 +81,7 @@ LIB		= libft.a
 
 BLUE		=	\033[1;34m
 CYAN		=	\033[0;36m
-GREEN		=	\033[0;32m
+GREEN		=	\033[0;92m
 ORANGE  	=	\033[0;33m
 NO_COLOR	=	\033[m
 PURPLE		=	\033[0;35m
@@ -101,17 +101,17 @@ header:
 	@echo -n "$(BPURPLE)"
 	@echo "      ___________________  ________     ____  ________  ____________"
 	@echo "     /                /   /      |     /    //     /   /         /"
-	@echo "    /    /|     /    /   /       |    /    //    /    /   ______/"
+	@echo "    /    /|    //    /   /       |    /    //    /    /   ______/"
 	@echo "   /    / |  / /    /   /   /|   |   /         /     /   ___/__"
 	@echo "  /    /  |/  /    /   /   __    |  /    /|    |    /         /"
 	@echo " /____/      /____/   /___/  |___| /____/ |____|   /_________/"
 	@echo "$(ICYAN)"
-	@echo "::::::::::::::::::::::::::::::::::::::::::::::::::::SEOZCAN::"
+	@echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SEOZCAN::"
 	@echo "$(NO_COLOR)"
 
 bonus:		header b_comp
 	@$(CC) -o $(NAME) $(wildcard $(ODIR)*.o)
-	@echo "$(GREEN)bonus exe:\t\t\t\t\t\t\t[OK]$(NO_COLOR)"
+	@echo "$(GREEN)bonus exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 s_comp:		o_dir
 	@$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS)) $(addprefix $(FDIR), $(FSRCS)) 
@@ -120,7 +120,7 @@ s_comp:		o_dir
 
 b_comp:		o_dir
 	@$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(BDIR), $(BSRCS)) $(addprefix $(FDIR), $(FSRCS))
-	@echo "$(GREEN)bonus compilation:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+	@echo "$(GREEN)bonus compilation:\t\t\t\t\t[OK]$(NO_COLOR)"
 	@mv *.o $(ODIR)
 
 o_dir:

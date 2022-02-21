@@ -12,11 +12,11 @@
 
 #include "../inc/pipex_bonus.h"
 
-void ft_infile(t_obj obj, char *av, char **envp)
+void ft_infile(t_obj obj, char *av, int *pipe, char **envp)
 {
-	close(obj.fd_pipe[0]);
-	dup2(obj.fd_pipe[1], STDOUT_FILENO);
-	close(obj.fd_pipe[1]);
+	close(pipe[0]);
+	dup2(pipe[1], STDOUT_FILENO);
+	close(pipe[1]);
 	dup2(obj.fd_in, STDIN_FILENO);
 	close(obj.fd_in);
 	obj.cmd_args = ft_split(av, ' ');
@@ -28,11 +28,11 @@ void ft_infile(t_obj obj, char *av, char **envp)
 	}
 }
 
-void ft_outfile(t_obj obj, char *av, char **envp)
+void ft_outfile(t_obj obj, char *av, int *pipe, char **envp)
 {
-	close(obj.fd_pipe[1]);
-	dup2(obj.fd_pipe[0], STDIN_FILENO);
-	close(obj.fd_pipe[0]);
+	close(pipe[1]);
+	dup2(pipe[0], STDIN_FILENO);
+	close(pipe[0]);
 	dup2(obj.fd_out, STDOUT_FILENO);
 	close(obj.fd_out);
 	obj.cmd_args = ft_split(av, ' ');
@@ -43,46 +43,57 @@ void ft_outfile(t_obj obj, char *av, char **envp)
 		ft_error("Execve returned an error");
 	}
 }
+void	ft_close(t_obj obj)
+{
+	int len;
+
+	len = 0;
+	while(len < obj.n_pipe)
+	{
+		close(obj.fd_pipe[len]);
+		len++;
+	}
+}
+
+void	get_pipes(t_obj obj)
+{	
+	int t;
+
+	t = 0;
+	obj.fd_pipe = (int *)malloc(sizeof(int) * obj.n_pipe);
+	while (t < obj.n_pipe)
+	{
+		if (pipe(obj.fd_pipe + 2 * t) == -1)
+			ft_error("Pipe returned an error");
+		t++;
+	}
+}
 
 void ft_pipe(t_obj obj, int ac, char **av, char **envp)
 {
 	int i;
-	int **fd_pipe;
-	int	t;
-	int	n_pipe;
 
-	i = 2;
-	t = 0;
-	n_pipe = ac - 4;
-	while (t < n_pipe)
-	{
-		fd_pipe[t] = t;
-		if (pipe(fd_pipe[t]) == -1)
-			ft_error("Pipe returned an error");
-		t++;
-	}
+	obj.n_pipe = ac - 4;
 	if ((obj.pid1 = fork()) < 0)
 		ft_error("Fork failed");
+	get_pipes(obj);
+	i = -1;
 	if (obj.pid1 == 0)
-	{
-		while (i < ac - 2)
-		{
-			ft_infile(obj, av[i], fd_pipe[i -2], envp);
-			i++;
-		}
-	}
+		while (i++ < obj.n_pipe)
+			ft_infile(obj, av[i], &obj.fd_pipe[i], envp);
 	if ((obj.pid2 = fork()) < 0)
 		ft_error("Fork failed");
 	if (obj.pid2 == 0)
-		ft_outfile(obj, av[ac - 2], fd_pipe[i - 2], envp);
+		ft_outfile(obj, av[ac - 2], &obj.fd_pipe[i], envp);
+	ft_close(obj);
 	waitpid(obj.pid1, NULL, 0);
 	waitpid(obj.pid2, NULL, 0);
-	ft_close(fd_pipe, n_pipe);
 }
 
 int main(int ac, char **av, char **envp)
 {
 	t_obj obj;
+
 	if (ac < 5)
 		ft_error("usage: ./pipex file1 cmd1 cmd2 ... cmdn file2");
 	if (*envp == NULL)
@@ -95,7 +106,7 @@ int main(int ac, char **av, char **envp)
 		ft_error("Could not open outfile");
 	obj.cmd_paths = ft_paths(envp);
 	obj.paths = ft_split(obj.cmd_paths, ':');
-	ft_pipe(obj, av, envp);
+	ft_pipe(obj, ac, av, envp);
 	ft_free_parent(obj.paths);
 	return (0);
 }
