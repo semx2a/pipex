@@ -83,22 +83,19 @@ void ft_pipe(t_obj obj, int ac, char **av, char **envp)
 int main(int ac, char **av, char **envp)
 {
 	t_obj obj;
-	if (ac >= 5)
-	{
-		if (*envp == NULL)
-			ft_error("Empty environment");
-		obj.fd_in = open(av[1], O_RDONLY);
-		if (obj.fd_in == -1)
-			ft_error("Could not read input file");
-		dup2(obj.fd_in, STDIN_FILENO);
-		close(obj.fd_in);
-		obj.fd_out = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0755);
-		if (obj.fd_out == -1)
-			ft_error("Could not create output file");
-		dup2(obj.fd_out, STDOUT_FILENO);
-		close(obj.fd_out);
-		ft_pipe(obj, av, envp);
-	}
-	ft_error("usage: ./pipex file1 cmd1 cmd2 ... cmdn file2");
+	if (ac < 5)
+		ft_error("usage: ./pipex file1 cmd1 cmd2 ... cmdn file2");
+	if (*envp == NULL)
+		ft_error("Empty environment");
+	obj.fd_in = open(av[1], O_RDONLY);
+	if (obj.fd_in == -1)
+		ft_error("Could not open infile");
+	obj.fd_out = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0755);
+	if (obj.fd_out == -1)
+		ft_error("Could not open outfile");
+	obj.cmd_paths = ft_paths(envp);
+	obj.paths = ft_split(obj.cmd_paths, ':');
+	ft_pipe(obj, av, envp);
+	ft_free_parent(obj.paths);
 	return (0);
 }

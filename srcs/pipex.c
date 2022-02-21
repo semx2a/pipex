@@ -6,13 +6,13 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 14:57:05 by seozcan           #+#    #+#             */
-/*   Updated: 2022/01/24 18:06:06 by seozcan          ###   ########.fr       */
+/*   Updated: 2022/02/21 15:14:34 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
 
-void ft_infile(t_obj obj, char *av, char **envp)
+void	ft_infile(t_obj obj, char *av, char **envp)
 {
 	close(obj.fd_pipe[0]);
 	dup2(obj.fd_pipe[1], STDOUT_FILENO);
@@ -28,7 +28,7 @@ void ft_infile(t_obj obj, char *av, char **envp)
 	}
 }
 
-void ft_outfile(t_obj obj, char *av, char **envp)
+void	ft_outfile(t_obj obj, char *av, char **envp)
 {
 	close(obj.fd_pipe[1]);
 	dup2(obj.fd_pipe[0], STDIN_FILENO);
@@ -44,27 +44,30 @@ void ft_outfile(t_obj obj, char *av, char **envp)
 	}
 }
 
-void ft_pipe(t_obj obj, char **av, char **envp)
+void	ft_pipe(t_obj obj, char **av, char **envp)
 {
-    if (pipe(obj.fd_pipe) == -1)
+	if (pipe(obj.fd_pipe) == -1)
 		ft_error("Pipe failed");
-	if ((obj.pid1 = fork()) == -1)
+	obj.pid1 = fork();
+	if (obj.pid1 == -1)
 		ft_error("Fork_in failed");
-    if (obj.pid1 == 0)
+	if (obj.pid1 == 0)
 		ft_infile(obj, av[2], envp);
-	if ((obj.pid2 = fork()) == -1)
+	obj.pid2 = fork();
+	if (obj.pid2 == -1)
 		ft_error("Fork_out failed");
 	if (obj.pid2 == 0)
-    	ft_outfile(obj, av[3], envp);
-    close(obj.fd_pipe[0]);
-    close(obj.fd_pipe[1]);
-	waitpid(obj.pid1, NULL, 0);	
-    waitpid(obj.pid2, NULL, 0);
+		ft_outfile(obj, av[3], envp);
+	close(obj.fd_pipe[0]);
+	close(obj.fd_pipe[1]);
+	waitpid(obj.pid1, NULL, 0);
+	waitpid(obj.pid2, NULL, 0);
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-	t_obj obj;
+	t_obj	obj;
+
 	if (ac < 5)
 		ft_error("usage: ./pipex file1 cmd1 cmd2 ... cmdn file2");
 	if (*envp == NULL)

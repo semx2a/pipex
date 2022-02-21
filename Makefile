@@ -85,6 +85,9 @@ GREEN		=	\033[0;32m
 ORANGE  	=	\033[0;33m
 NO_COLOR	=	\033[m
 PURPLE		=	\033[0;35m
+BPURPLE		=	\033[1;35m
+BCYAN		=	\033[1;36m
+ICYAN		=	\033[3;36m
 
 # -------------------------- #
 #           		   RULES #
@@ -95,18 +98,18 @@ all:		header s_comp
 	@echo "$(GREEN)mandatory exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 header:
-	@echo -n "$(PURPLE)"
+	@echo -n "$(BPURPLE)"
 	@echo "      ___________________  ________     ____  ________  ____________"
 	@echo "     /                /   /      |     /    //     /   /         /"
 	@echo "    /    /|     /    /   /       |    /    //    /    /   ______/"
 	@echo "   /    / |  / /    /   /   /|   |   /         /     /   ___/__"
 	@echo "  /    /  |/  /    /   /   __    |  /    /|    |    /         /"
 	@echo " /____/      /____/   /___/  |___| /____/ |____|   /_________/"
-	@echo "$(CYAN)"
+	@echo "$(ICYAN)"
 	@echo "::::::::::::::::::::::::::::::::::::::::::::::::::::SEOZCAN::"
 	@echo "$(NO_COLOR)"
 
-bonus:		b_comp
+bonus:		header b_comp
 	@$(CC) -o $(NAME) $(wildcard $(ODIR)*.o)
 	@echo "$(GREEN)bonus exe:\t\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
@@ -128,15 +131,15 @@ else
 	@echo "$(GREEN)objs folder:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 endif
 
-update:
+update: header
 	@git pull
 
-push:
+push:	header
 	@git add *
 	@git commit -m 'update'
 	@git push
 
-clean:
+clean:	header
 ifneq ($(wildcard ./$(ODIR)),)
 	@rm -rf $(ODIR)
 	@echo "$(GREEN)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
@@ -145,7 +148,7 @@ else
 	@echo "$(GREEN)obj files:\t\t\t\t[RM]$(NO_COLOR)"
 endif
 
-fclean:	clean
+fclean:	header clean
 	@rm ${NAME}
 	@echo "$(GREEN)$(NAME) executable:\t\t\t\t\t[RM]$(NO_COLOR)"
 

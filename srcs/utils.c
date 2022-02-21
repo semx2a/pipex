@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/25 19:56:44 by seozcan           #+#    #+#             */
-/*   Updated: 2022/01/25 19:56:47 by seozcan          ###   ########.fr       */
+/*   Created: 2022/02/21 15:15:17 by seozcan           #+#    #+#             */
+/*   Updated: 2022/02/21 15:15:50 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
 
-void ft_error(const char *str)
+void	ft_error(const char *str)
 {
 	write(2, str, ft_strlen(str));
 	write(2, strerror(errno), ft_strlen(strerror(errno)));
 	exit(EXIT_FAILURE);
 }
 
-int ft_tablen(char **tab)
+int	ft_tablen(char **tab)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (tab[len] != 0)
@@ -29,7 +29,7 @@ int ft_tablen(char **tab)
 	return (len);
 }
 
-void ft_free_child(char **args, char *arg)
+void	ft_free_child(char **args, char *arg)
 {
 	while (*args != 0)
 		free(*args++);
@@ -37,9 +37,9 @@ void ft_free_child(char **args, char *arg)
 	free(arg);
 }
 
-void ft_free_parent(char **args)
+void	ft_free_parent(char **args)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (args[i] != 0)
