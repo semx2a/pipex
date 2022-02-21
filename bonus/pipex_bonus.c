@@ -17,7 +17,15 @@ void ft_infile(t_obj obj, char *av, char **envp)
 	close(obj.fd_pipe[0]);
 	dup2(obj.fd_pipe[1], STDOUT_FILENO);
 	close(obj.fd_pipe[1]);
-	ft_exec(obj, av, envp);
+	dup2(obj.fd_in, STDIN_FILENO);
+	close(obj.fd_in);
+	obj.cmd_args = ft_split(av, ' ');
+	obj.cmd = get_cmd(obj.paths, obj.cmd_args[0]);
+	if (execve(obj.cmd, obj.cmd_args, envp) == -1)
+	{	
+		ft_free_child(obj.cmd_args, obj.cmd);
+		ft_error("Execve returned an error");
+	}
 }
 
 void ft_outfile(t_obj obj, char *av, char **envp)
@@ -25,7 +33,15 @@ void ft_outfile(t_obj obj, char *av, char **envp)
 	close(obj.fd_pipe[1]);
 	dup2(obj.fd_pipe[0], STDIN_FILENO);
 	close(obj.fd_pipe[0]);
-	ft_exec(obj, av, envp);
+	dup2(obj.fd_out, STDOUT_FILENO);
+	close(obj.fd_out);
+	obj.cmd_args = ft_split(av, ' ');
+	obj.cmd = get_cmd(obj.paths, obj.cmd_args[0]);
+	if (execve(obj.cmd, obj.cmd_args, envp) == -1)
+	{	
+		ft_free_child(obj.cmd_args, obj.cmd);
+		ft_error("Execve returned an error");
+	}
 }
 
 void ft_pipe(t_obj obj, int ac, char **av, char **envp)

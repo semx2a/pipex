@@ -19,26 +19,35 @@
 # include <sys/wait.h>
 # include <stdio.h>
 # include <errno.h>
-# include "../libft/inc/libft.h"
+# include <string.h>
 
 typedef struct s_obj
 {
     int fd_in;
     int fd_out;
     int fd_pipe[2];
-    int cmdn;
-    int pipen;
     pid_t pid1;
     pid_t pid2;
-    char    **cmd;
-    char    *path;
+    char    *cmd;
+    char    **cmd_args;
+    char    *cmd_paths;
+    char    **paths;
 }  t_obj;
 
 int ft_tablen(char **tab);
+int	ft_tablen(char **tab);
 void	ft_error(const char *str);
-void	ft_exec(t_obj obj, char *av, char **envp);
-char	*ft_path(char *src, char **envp);
-char	**ft_tabcpy(char **dst, char **src);
 void	ft_close(int **fd_pipe, int len);
+void    ft_free_child(char **args, char *arg);
+void    ft_free_parent(char **args);
+char	*ft_paths(char **envp);
+char    *get_cmd(char **paths, char *cmd);
+char	**ft_tabcpy(char **dst, char **src);
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+char	*ft_strjoin(char *s1, char *s2);
+char	**ft_split(char const *s, char a);
+char    *ft_substr(char const *s, char *d, size_t start, size_t len);
+char	*ft_strdup(const char *s1);
+size_t  ft_strlen(const char *str);
 
 #endif

@@ -11,13 +11,13 @@
 # **************************************************************************** #
 
 # -------------------------- #
-#	 	   TARGET            #
+#	 	   			  TARGET #
 # -------------------------- #
 
 NAME	= pipex
 
 # -------------------------- #
-#          SOURCES           #
+#          			 SOURCES #
 # -------------------------- #
 
 SDIR	= srcs/
@@ -29,27 +29,27 @@ SRCS	= pipex.c utils.c cmds.c
 OBJS	= ${SRCS:.c=.o}
 
 # -------------------------- #
-#         FUNCTIONS          #
+#        		   FUNCTIONS #
 # -------------------------- #
 
 FDIR	= fcts/
 
-FT_C	= ft_split.c ft_strjoin.c ft_strnstr.c ft_substr.c
+FSRCS	= ft_split.c ft_strjoin.c ft_strnstr.c ft_substr.c ft_strlen.c
 
-F_OBJS	= ${FT_C:.c=.o}
-
-#----------------------------#
-#		  FT_PRINTF			 #
-#----------------------------#
-
-PFDIR	= ft_printf/
-
-PFSRC	= ft_numbers.c ft_printf.c ft_strings.c 
-
-PFOBJS	= $(PFSRC:.c=.o)
+FOBJS	= ${FSRCS:.c=.o}
 
 # -------------------------- #
-#         COMPILERS          #
+#					   BONUS #
+# -------------------------- #
+
+BDIR	= bonus/
+
+BSRCS	= pipex_bonus.c utils_bonus.c cmds_bonus.c
+
+BOBJS	= ${BSRCS:.c=.o}
+
+# -------------------------- #
+#			 	   COMPILERS #
 # -------------------------- #
 
 CC		= gcc
@@ -61,7 +61,7 @@ AR		= ar
 ARFLAGS	= rcs
 
 # -------------------------- #
-#          HEADERS           #
+#          			 HEADERS #
 # -------------------------- #
 
 IDIR	= inc/
@@ -69,33 +69,64 @@ IDIR	= inc/
 INC		= pipex.h
 
 # -------------------------- #
-#          LIBRARY           #
+#         			 LIBRARY #
 # -------------------------- #											
 
 LDIR 	= libft/
 
 LIB		= libft.a
+# -------------------------- #
+#					  COLORS #
+# ---------------------------#
 
+BLUE		=	\033[1;34m
+CYAN		=	\033[0;36m
+GREEN		=	\033[0;32m
+ORANGE  	=	\033[0;33m
+NO_COLOR	=	\033[m
+PURPLE		=	\033[0;35m
 
 # -------------------------- #
-#          SCRIPTS           #
+#           		   RULES #
 # -------------------------- #
 
-$(NAME):	%: o_dir
-	$(CC) -o $(NAME) $(addprefix $(ODIR), $(OBJS)) $(addprefix $(ODIR), $(F_OBJS)) $(addprefix $(ODIR), $(PFOBJS)) && make clean 
+all:		header s_comp
+	@$(CC) -o $(NAME) $(wildcard $(ODIR)*.o)
+	@echo "$(GREEN)mandatory exe:						[OK]$(NO_COLOR)"
 
-# -------------------------- #
-#           RULES            #
-# -------------------------- #
+header:
+	@echo -n "$(PURPLE)"
+	@echo "      __________________  ________     ____  _______   ___________"
+	@echo "     /                /  /      |     /    //     /   /         /"
+	@echo "    /    /|     /    /  /       |    /    //    /    /   ______/"
+	@echo "   /    / |  / /    /  /   /|   |   /         /     /   ___/__"
+	@echo "  /    /  |/  /    /  /   __    |  /    /|    |    /         /"
+	@echo " /____/      /____/  /___/  |___| /____/ |____|   /_________/"
+	@echo "$(CYAN)"
+	@echo "                                                     SEOZCAN "
+	@echo "$(NO_COLOR)"
 
-all:		${NAME}
+bonus:		b_comp
+	@$(CC) -o $(NAME) $(wildcard $(ODIR)*.o)
+	@echo "$(GREEN)bonus exe:							[OK]$(NO_COLOR)"
 
-o_dir:		o_comp
+s_comp:		o_dir
+	@$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS)) $(addprefix $(FDIR), $(FSRCS)) 
+	@echo "$(GREEN)compilation:				 	 	[OK]$(NO_COLOR)"
+	@mv *.o $(ODIR)
+
+b_comp:		o_dir
+	@$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(BDIR), $(BSRCS)) $(addprefix $(FDIR), $(FSRCS))
+	@echo "$(GREEN)bonus compilation:							[OK]$(NO_COLOR)"
+	@mv *.o $(ODIR)
+
+o_dir:
+ifneq ($(wildcard $(ODIR)),)
+	@echo "$(GREEN)objs folder:						[OK]$(NO_COLOR)"
+else
 	@mkdir $(ODIR)
-	@mv $(OBJS) $(F_OBJS) $(PFOBJS) $(ODIR)
-
-o_comp:
-	$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS)) $(addprefix $(FDIR), $(FT_C)) $(addprefix $(PFDIR), $(PFSRC))
+	@echo "$(GREEN)objs folder:						[OK]$(NO_COLOR)"
+endif
 
 update:
 	@git pull
@@ -106,11 +137,18 @@ git:
 	@git push
 
 clean:
-	@rm -rf $(ODIR)	
+ifneq ($(wildcard ./$(ODIR)),)
+	@rm -rf $(ODIR)
+	@echo "$(GREEN)objs folder:					[RM]$(NO_COLOR)"
+else
+	@rm $(wildcard *.o)
+	@echo "$(GREEN)obj files:				[RM]$(NO_COLOR)"
+endif
 
-fclean:
+fclean:	clean
 	@rm ${NAME}
+	@echo "$(GREEN)$(NAME) executable:				[RM]$(NO_COLOR)"
 
-re:			fclean all
+re:		header fclean all
 
 .PHONY:	all clean fclean re
