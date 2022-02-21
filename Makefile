@@ -92,47 +92,46 @@ PURPLE		=	\033[0;35m
 
 all:		header s_comp
 	@$(CC) -o $(NAME) $(wildcard $(ODIR)*.o)
-	@echo "$(GREEN)mandatory exe:						[OK]$(NO_COLOR)"
+	@echo "$(GREEN)mandatory exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 header:
 	@echo -n "$(PURPLE)"
-	@echo "      __________________  ________     ____  _______   ___________"
-	@echo "     /                /  /      |     /    //     /   /         /"
-	@echo "    /    /|     /    /  /       |    /    //    /    /   ______/"
-	@echo "   /    / |  / /    /  /   /|   |   /         /     /   ___/__"
-	@echo "  /    /  |/  /    /  /   __    |  /    /|    |    /         /"
-	@echo " /____/      /____/  /___/  |___| /____/ |____|   /_________/"
+	@echo "      ___________________  ________     ____  ________  ____________"
+	@echo "     /                /   /      |     /    //     /   /         /"
+	@echo "    /    /|     /    /   /       |    /    //    /    /   ______/"
+	@echo "   /    / |  / /    /   /   /|   |   /         /     /   ___/__"
+	@echo "  /    /  |/  /    /   /   __    |  /    /|    |    /         /"
+	@echo " /____/      /____/   /___/  |___| /____/ |____|   /_________/"
 	@echo "$(CYAN)"
-	@echo "                                                     SEOZCAN "
+	@echo "::::::::::::::::::::::::::::::::::::::::::::::::::::SEOZCAN::"
 	@echo "$(NO_COLOR)"
 
 bonus:		b_comp
 	@$(CC) -o $(NAME) $(wildcard $(ODIR)*.o)
-	@echo "$(GREEN)bonus exe:							[OK]$(NO_COLOR)"
+	@echo "$(GREEN)bonus exe:\t\t\t\t\t\t\t[OK]$(NO_COLOR)"
 
 s_comp:		o_dir
 	@$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS)) $(addprefix $(FDIR), $(FSRCS)) 
-	@echo "$(GREEN)compilation:				 	 	[OK]$(NO_COLOR)"
+	@echo "$(GREEN)compilation:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 	@mv *.o $(ODIR)
 
 b_comp:		o_dir
 	@$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(BDIR), $(BSRCS)) $(addprefix $(FDIR), $(FSRCS))
-	@echo "$(GREEN)bonus compilation:							[OK]$(NO_COLOR)"
+	@echo "$(GREEN)bonus compilation:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 	@mv *.o $(ODIR)
 
 o_dir:
 ifneq ($(wildcard $(ODIR)),)
-	@echo "$(GREEN)objs folder:						[OK]$(NO_COLOR)"
+	@echo "$(GREEN)objs folder:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 else
 	@mkdir $(ODIR)
-	@echo "$(GREEN)objs folder:						[OK]$(NO_COLOR)"
+	@echo "$(GREEN)objs folder:\t\t\t\t\t\t[OK]$(NO_COLOR)"
 endif
 
 update:
 	@git pull
 
-git:
-	@echo "n"
+vog:
 	@git add *
 	@git commit -m 'update'
 	@git push
@@ -140,15 +139,15 @@ git:
 clean:
 ifneq ($(wildcard ./$(ODIR)),)
 	@rm -rf $(ODIR)
-	@echo "$(GREEN)objs folder:					[RM]$(NO_COLOR)"
+	@echo "$(GREEN)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
 else
 	@rm $(wildcard *.o)
-	@echo "$(GREEN)obj files:				[RM]$(NO_COLOR)"
+	@echo "$(GREEN)obj files:\t\t\t\t[RM]$(NO_COLOR)"
 endif
 
 fclean:	clean
 	@rm ${NAME}
-	@echo "$(GREEN)$(NAME) executable:				[RM]$(NO_COLOR)"
+	@echo "$(GREEN)$(NAME) executable:\t\t\t\t\t[RM]$(NO_COLOR)"
 
 re:		header fclean all
 
