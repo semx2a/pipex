@@ -132,6 +132,7 @@ update:
 	@git pull
 
 git:
+	@echo "n"
 	@git add *
 	@git commit -m 'update'
 	@git push
