@@ -14,27 +14,25 @@
 
 void	ft_error(const char *str)
 {
+	write(2, "ERR:\t", 5);
 	write(2, str, ft_strlen(str));
-	write(2, strerror(errno), ft_strlen(strerror(errno)));
+	if (ft_strnstr(strerror(errno), "Success", 7) == 0)
+		write(2, strerror(errno), ft_strlen(strerror(errno)));
+	write(2, "\n", 1);
 	exit(EXIT_FAILURE);
 }
 
-int	ft_tablen(char **tab)
+void	ft_free_child(char **args)
 {
-	int	len;
+	int	i;
 
-	len = 0;
-	while (tab[len] != 0)
-		len++;
-	return (len);
-}
-
-void	ft_free_child(char **args, char *arg)
-{
-	while (*args != 0)
-		free(*args++);
+	i = 0;
+	while (args[i] != 0)
+	{
+		free(args[i]);
+		i++;
+	}
 	free(args);
-	free(arg);
 }
 
 void	ft_free_parent(char **args)

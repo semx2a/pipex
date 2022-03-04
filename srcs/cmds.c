@@ -14,9 +14,14 @@
 
 char	*ft_paths(char **envp)
 {
-	while (!(ft_strnstr(*envp, "PATH", 5)))
+	while (*envp != 0)
+	{
+		if (ft_strnstr(*envp, "PATH", 5))
+			return (*envp + 5);
 		envp++;
-	return (*envp + 5);
+	}
+	ft_error("env 'PATH' not found");
+	return (NULL);
 }
 
 char	*get_cmd(char **paths, char *cmd)
@@ -37,7 +42,7 @@ char	*get_cmd(char **paths, char *cmd)
 			free(ret);
 			paths++;
 		}
-		ft_error("Command not found");
+		ft_error("Command not found: ");
 	}
 	return (NULL);
 }

@@ -1,8 +1,20 @@
-#include "../inc/pipex.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/22 20:46:12 by seozcan           #+#    #+#             */
+/*   Updated: 2022/02/22 20:48:30 by seozcan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../inc/functions.h"
 
 static size_t	ft_count(char const *s, char a)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (s[i] && s[i] != a)
@@ -10,7 +22,7 @@ static size_t	ft_count(char const *s, char a)
 	return (i);
 }
 
-static void    ft_free_tab(char **tab, int len)
+static void	ft_free_tab(char **tab, int len)
 {
 	while (len >= 0)
 	{
@@ -36,7 +48,7 @@ static void	ft_substrcpy(char const *s, char a, char **d)
 			w_count = ft_count(s + i, a);
 			d[j] = ft_substr(s + i, d[j], 0, w_count);
 			if (ft_strlen(d[j]) != w_count)
-				return(ft_free_tab(d, j));
+				return (ft_free_tab(d, j));
 			i = i + w_count + 1;
 			j++;
 		}
@@ -45,9 +57,9 @@ static void	ft_substrcpy(char const *s, char a, char **d)
 
 char	**ft_split(char const *s, char a)
 {
-	char		**d;
+	char	**d;
 	size_t	t_count;
-	size_t			i;
+	size_t	i;
 
 	if (!s)
 		return (NULL);
