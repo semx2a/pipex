@@ -6,11 +6,11 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 14:57:05 by seozcan           #+#    #+#             */
-/*   Updated: 2022/02/21 15:14:34 by seozcan          ###   ########.fr       */
+/*   Updated: 2024/02/01 17:44:16 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex.h"
+#include "pipex.h"
 
 void	ft_infile(t_obj obj, char *av, char **envp)
 {
@@ -25,7 +25,7 @@ void	ft_infile(t_obj obj, char *av, char **envp)
 	{	
 		ft_free_child(obj.cmd_args);
 		ft_free_parent(obj.paths);
-		ft_error("Execve returned an error: ");
+		exit(ft_error("pipex ", "Execve returned an error: "));
 	}
 }
 
@@ -42,22 +42,22 @@ void	ft_outfile(t_obj obj, char *av, char **envp)
 	{	
 		ft_free_child(obj.cmd_args);
 		ft_free_parent(obj.paths);
-		ft_error("Execve returned an error: ");
+		exit(ft_error("pipex ", "Execve returned an error: "));
 	}
 }
 
 void	ft_pipe(t_obj obj, char **av, char **envp)
 {
 	if (pipe(obj.fd_pipe) == -1)
-		ft_error("Pipe failed: ");
+		exit(ft_error("pipex ", "Pipe failed: "));
 	obj.pid1 = fork();
 	if (obj.pid1 == -1)
-		ft_error("Fork_in failed: ");
+		exit(ft_error("pipex ", "Fork_in failed: "));
 	if (obj.pid1 == 0)
 		ft_infile(obj, av[2], envp);
 	obj.pid2 = fork();
 	if (obj.pid2 == -1)
-		ft_error("Fork_out failed: ");
+		exit(ft_error("pipex ", "Fork_out failed: "));
 	if (obj.pid2 == 0)
 		ft_outfile(obj, av[3], envp);
 	close(obj.fd_pipe[0]);
@@ -72,15 +72,15 @@ int	main(int ac, char **av, char **envp)
 	t_obj	obj;
 
 	if (ac != 5)
-		ft_error("usage: ./pipex file1 cmd1 cmd2 file2");
+		exit(ft_error("pipex ", "usage: ./pipex file1 cmd1 cmd2 file2"));
 	if (*envp == NULL)
-		ft_error("Empty environment");
+		exit(ft_error("pipex ", "Empty environment"));
 	obj.fd_in = open(av[1], O_RDONLY);
 	if (obj.fd_in == -1)
-		ft_error("Could not open infile: ");
+		exit(ft_error("pipex ", "Could not open infile: "));
 	obj.fd_out = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (obj.fd_out == -1)
-		ft_error("Could not open outfile: ");
+		exit(ft_error("pipex ", "Could not open outfile: "));
 	obj.cmd_paths = ft_paths(envp);
 	obj.paths = ft_split(obj.cmd_paths, ':');
 	ft_pipe(obj, av, envp);

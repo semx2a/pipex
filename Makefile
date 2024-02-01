@@ -6,149 +6,137 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2022/02/22 20:53:09 by seozcan          ###   ########.fr        #
+#    Updated: 2024/02/01 18:13:09 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::TARGET::
+include settings.mk
 
-NAME	= pipex
+# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::DIRECTORIES::
 
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCES::
+ifeq ($(MAKECMDGOALS),)
+	S = src/
+else ifeq ($(MAKECMDGOALS), all)
+	S = src/
+else ifeq ($(MAKECMDGOALS), bonus)
+	S = bonus/
+endif
 
-SDIR	= srcs/
+O		=	obj/
+I 		=	inc/
+D 		=	dep/
+L 		=	Libft/
+P 		=	ft_printf/
+M 		=	minilibx-linux/
 
-ODIR	= objs/
 
-SRCS	= pipex.c utils.c cmds.c
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::CUSTOM FLAGS::
 
-OBJS	= ${SRCS:.c=.o}
+CFLAGS	+=	-I$I
 
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::FUNCTIONS::
+ifeq ($(IS_LIB), true)
+	CFLAGS	+=	-I$L$I
+	LIBS += $(LIB)
+endif
 
-FDIR	= fcts/
+ifeq ($(IS_PTF), true)
+	CFLAGS	+=	-I$P$I
+	LIBS += $(PTF)
+endif
 
-FSRCS	= ft_split.c ft_strjoin.c ft_strnstr.c ft_substr.c ft_strlen.c\
-ft_strdup.c
+ifeq ($(IS_MLX), true)
+	CFLAGS	+=	-I$M
+	LIBS += $(MLX)
+endif
 
-FOBJS	= ${FSRCS:.c=.o}
+CLFAGS	+=	-Wconversion
 
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::BONUS::
+CFLAGS	+=	-g3 -fsanitize=address
 
-BDIR	= bonus/
+ifeq ($(IS_MLX), true)
+	MLXFLAGS	=	-lXext -lX11 -lm
+endif
 
-BSRCS	= pipex_bonus.c utils_bonus.c cmds_bonus.c
+RM		=	/bin/rm -rf
 
-BOBJS	= ${BSRCS:.c=.o}
+SPACE 	= 	awk -F ':' '{ printf "%-61s %s\n", $$1 ":", $$2 }'
 
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::COMPILERS::
 
-CC		= gcc
+# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::OBJECTS::
 
-WFLAGS	= -Wall -Wextra -Werror
+OBJ		=	$(SRC:$S%=$O%.o)
 
-GLAG	= -g3
-
-SANFLAG	= -fsanitize=address
-
-AR		= ar
-
-ARFLAGS	= rcs
-
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::HEADERS::
-
-IDIR	= inc/
-
-INC		= pipex.h
-
-# :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::LIBRARY::
-
-LDIR 	= libft/
-
-LIB		= libft.a
-
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::COLORS::
-
-BLUE		=	\033[1;34m
-CYAN		=	\033[0;36m
-GREEN		=	\033[0;92m
-ORANGE  	=	\033[0;33m
-NO_COLOR	=	\033[m
-PURPLE		=	\033[0;35m
-BPURPLE		=	\033[1;35m
-BGREEN		=	\033[1;92m
-BCYAN		=	\033[1;36m
-SCYAN		=	\033[3;36m
+DEP		=	$(SRC:$S%=$D%.d)
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::RULES::
 
-all:		header clean $(NAME)
-	@$(CC) -o $(NAME) $(wildcard $(ODIR)*.o)
-	@echo "$(GREEN)mandatory exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+all: header lib h2 message $(NAME)
 
-bonus:		header clean o_dir
-	@$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(BDIR), $(BSRCS)) \
-$(addprefix $(FDIR), $(FSRCS))
-	@echo "$(GREEN)bonus compilation:\t\t\t\t\t[OK]$(NO_COLOR)"
-	@mv *.o $(ODIR)
-	@$(CC) -o $(NAME) $(ODIR)*.o
-	@echo "$(GREEN)bonus exe:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+bonus: all
 
-$(NAME):	o_dir	
-	@$(CC) $(WFLAGS) -I $(IDIR) -c $(addprefix $(SDIR), $(SRCS)) \
-$(addprefix $(FDIR), $(FSRCS)) 
-	@echo "$(GREEN)mandatory compilation:\t\t\t\t\t[OK]$(NO_COLOR)"
-	@mv $(OBJS) $(FOBJS) $(ODIR)
+$O:
+	@mkdir -p $@
+	@echo "$(HIGREEN)creating $O folder:[OK]$(RESET)" | $(SPACE)
 
-header:
-	@echo -n "$(BPURPLE)"
-	@echo "   ______________________________________________________"
-	@echo "  /\     __________    ________    ___   ___    _______  \ "
-	@echo " /  \   /\         \  /\   __  \  /\  \ /\  \  /\  ____\  \ "
-	@echo "/    \  \ \  \ _/\  \ \ \   __  \ \ \  \ /_ /_ \ \  _\_/_  \ "
-	@echo "\     \  \ \__\_/ \__\ \ \__\-\__\ \ \__\  \__\ \ \______\  \ "
-	@echo " \     \  \/__/  \/__/  \/__/ /__/  \/__/ \/__/  \/______/   \ "
-	@echo "  \     \_________ ___________________________________________\ "
-	@echo "   \    /                                                     / "
-	@echo "    \  /                   $(SCYAN) S E O Z C A N \
-$(NO_COLOR)$(BPURPLE)            ____   / "
-	@echo "     \/______________________________________________/\   \_/ "
-	@echo "                                                     \ \___\ "
-	@echo "                                                      \/___/ "
-	@echo "$(NO_COLOR)"
+$(OBJ): | $O
 
-o_dir:
-	@mkdir -p $(ODIR)
-	@echo "$(GREEN)objs folder:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+$(OBJ): $O%.o: $S%
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "$(HIGREEN)compiling $<:[OK]$(RESET)" | $(SPACE)
 
-update: header fclean
-	@git pull
+$D:
+	@mkdir -p $@
+	@echo "$(HIGREEN)creating $D folder:[OK]$(RESET)" | $(SPACE)
 
-push:	header fclean
-	@echo -n "$(GREEN)"
-	@git add .
-	@git commit --quiet -m 'update'
-	@git push --quiet
-	@echo "$(GREEN)git push:\t\t\t\t\t\t[OK]$(NO_COLOR)"
+$(DEP): | $D
 
-debug: header
-	@$(CC) $(WFLAGS) $(GFLAG) -I $(IDIR) $(addprefix $(FDIR), $(FSRCS)) \
-	$(addprefix $(SDIR), $(SRCS))
-	@echo "$(GREEN)debug executable:\t\t\t\t\t[OK]$(NO_COLOR)"
+$(DEP): $D%.d: $S%
+	@$(CC) $(CFLAGS) -MM -MF $@ -MT "$O$*.o $@" $<
+	@echo "$(HIGREEN)compiling $<:[OK]$(RESET)" | $(SPACE)
 
-clean:	header
-ifneq ($(wildcard ./$(ODIR)),)
-	@rm -rf $(ODIR)
-	@echo "$(GREEN)objs folder:\t\t\t\t\t\t[RM]$(NO_COLOR)"
-else
-	@rm -f $(wildcard *.o)
-	@echo "$(GREEN)obj files:\t\t\t\t\t\t[RM]$(NO_COLOR)"
+
+$(NAME): $(OBJ) $(DEP)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
+	@echo "$(HIGREEN)compiling $(NAME):[OK]$(RESET)" | $(SPACE)
+
+lib:
+ifeq ($(IS_LIB),true)
+	@make -C $L --quiet
+endif
+ifeq ($(IS_PTF),true)
+	@make -C $P --quiet
+endif
+ifeq ($(IS_MLX),true)
+	@make -C $M --quiet 
 endif
 
-fclean:	header clean
-	@rm -f $(NAME)
-	@echo "$(GREEN)$(NAME) executable:\t\t\t\t\t[OK]$(NO_COLOR)"
-	
-re:		header fclean all 
+cleanobj:
+	@$(RM) $(O)
+	@echo "$(HIORANGE)removing $O folder:[RM]$(RESET)" | $(SPACE)
 
-.PHONY:	all bonus clean fclean re push update o_dir debug
+cleandep:
+	@$(RM) $(D)
+	@echo "$(HIORANGE)removing $D folder:[RM]$(RESET)" | $(SPACE)
+
+clean: header h2 cleanobj cleandep
+
+fcleanlib: header
+ifeq ($(IS_LIB),true)
+	@make -C $L --quiet fclean
+endif
+ifeq ($(IS_PTF),true)
+	@make -C $P --quiet fclean
+endif
+ifeq ($(IS_MLX),true)
+	@make -C $M --quiet clean
+endif
+
+fclean: header fcleanlib h2 clean
+	@$(RM) $(NAME)
+	@echo "$(HIORANGE)removing $(NAME):[RM]$(RESET)" | $(SPACE)
+	
+re:	header fclean all
+
+include colors.mk output.mk header.mk
+
+.PHONY:	all clean fclean re

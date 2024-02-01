@@ -2,6 +2,21 @@
 
 The Pipex project is a detailed exploration and programming of a UNIX pipe. The project is coded in C and adheres to the 42 School coding norm. This project served as an excellent opportunity to gain a deeper understanding of system calls and inter-process communication via pipes in a UNIX-like system.
 
+## Usage 
+
+You can launch the test script by running the following command:
+
+```shell
+chmod +x test.sh && ./test.sh
+
+```
+
+You can use the following arguments to run the test script:
+```shell
+./test.sh clean # Cleans the project
+./test.sh bonus # Runs the bonus project tests
+```
+
 ## Project Description
 
 The Pipex project mimics the behavior of the following simple shell command:

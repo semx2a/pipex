@@ -6,11 +6,11 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 20:50:30 by seozcan           #+#    #+#             */
-/*   Updated: 2022/02/22 20:50:31 by seozcan          ###   ########.fr       */
+/*   Updated: 2024/02/01 17:43:50 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex_bonus.h"
+#include "pipex_bonus.h"
 
 static char	*get_cmd(char **paths, char *cmd)
 {
@@ -30,7 +30,7 @@ static char	*get_cmd(char **paths, char *cmd)
 			free(ret);
 			paths++;
 		}
-		ft_error("Command not found: ");
+		exit(ft_error("pipex ", "Command not found: "));
 	}
 	return (NULL);
 }
@@ -45,7 +45,7 @@ void	ft_process(t_obj o, char **envp)
 {
 	o.pid = fork();
 	if (o.pid < 0)
-		ft_error("Fork failed: ");
+		exit(ft_error("pipex ", "Fork failed: "));
 	else if (o.pid == 0)
 	{
 		if (o.index == 0)
@@ -61,7 +61,7 @@ void	ft_process(t_obj o, char **envp)
 		{
 			ft_free_child(&o);
 			ft_free_parent(&o);
-			ft_error("Execve returned an error: ");
+			exit(ft_error("pipex ", "Execve returned an error: "));
 		}
 	}
 }

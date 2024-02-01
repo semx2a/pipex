@@ -1,36 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/22 20:46:42 by seozcan           #+#    #+#             */
-/*   Updated: 2022/02/22 20:46:45 by seozcan          ###   ########.fr       */
+/*   Created: 2022/02/21 15:15:17 by seozcan           #+#    #+#             */
+/*   Updated: 2024/02/01 17:44:21 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/functions.h"
+#include "pipex.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+void	ft_free_child(char **args)
 {
-	size_t	i;
-	size_t	j;
+	int	i;
 
 	i = 0;
-	j = 0;
-	if (!*needle)
-		return ((char *)haystack);
-	while (haystack[i])
+	while (args[i] != 0)
 	{
-		j = 0;
-		while (haystack[i + j] == needle[j] && i + j < len)
-		{
-			if (!needle[j + 1])
-				return ((char *)haystack + i);
-			j++;
-		}
+		free(args[i]);
 		i++;
 	}
-	return (0);
+	free(args);
+}
+
+void	ft_free_parent(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i] != 0)
+	{
+		free(args[i]);
+		i++;
+	}
+	free(args);
 }

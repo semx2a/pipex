@@ -6,7 +6,7 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 15:04:42 by seozcan           #+#    #+#             */
-/*   Updated: 2022/02/22 20:43:17 by seozcan          ###   ########.fr       */
+/*   Updated: 2024/02/01 16:01:27 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdio.h>
 # include <errno.h>
 # include <string.h>
-# include "functions.h"
+# include "libft.h"
 
 typedef struct s_obj
 {
@@ -33,10 +33,9 @@ typedef struct s_obj
 	char	**cmd_args;
 	char	*cmd_paths;
 	char	**paths;
-}		t_obj;
+}	t_obj;
 
 /* utils.c */
-void	ft_error(const char *str);
 void	ft_free_child(char **args);
 void	ft_free_parent(char **args);
 

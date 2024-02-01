@@ -6,21 +6,11 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 20:50:50 by seozcan           #+#    #+#             */
-/*   Updated: 2022/02/22 20:50:52 by seozcan          ###   ########.fr       */
+/*   Updated: 2024/02/01 17:43:31 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex_bonus.h"
-
-void	ft_error(const char *str)
-{
-	write(2, "ERR:\t", 5);
-	write(2, str, ft_strlen(str));
-	if (ft_strnstr(strerror(errno), "Success", 7) == 0)
-		write(2, strerror(errno), ft_strlen(strerror(errno)));
-	write(2, "\n", 1);
-	exit(EXIT_FAILURE);
-}
+#include "pipex_bonus.h"
 
 void	ft_free_child(t_obj *obj)
 {

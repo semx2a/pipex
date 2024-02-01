@@ -6,11 +6,11 @@
 /*   By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 15:16:11 by seozcan           #+#    #+#             */
-/*   Updated: 2022/02/21 15:16:48 by seozcan          ###   ########.fr       */
+/*   Updated: 2024/02/01 17:44:12 by seozcan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/pipex.h"
+#include "pipex.h"
 
 char	*ft_paths(char **envp)
 {
@@ -20,7 +20,7 @@ char	*ft_paths(char **envp)
 			return (*envp + 5);
 		envp++;
 	}
-	ft_error("env 'PATH' not found");
+	exit(ft_error("pipex ", "env 'PATH' not found"));
 	return (NULL);
 }
 
@@ -42,7 +42,7 @@ char	*get_cmd(char **paths, char *cmd)
 			free(ret);
 			paths++;
 		}
-		ft_error("Command not found: ");
+		exit(ft_error("pipex ", "Command not found: "));
 	}
 	return (NULL);
 }
