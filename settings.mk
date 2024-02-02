@@ -7,15 +7,11 @@ NAME	=	pipex
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCE::
 
-ifeq ($(MAKECMDGOALS),)
-	SRC	= $Scmds.c \
-	$Spipex.c \
-	$Sutils.c
-else ifeq ($(MAKECMDGOALS), all)
-	SRC	= $Scmds.c \
-	$Spipex.c \
-	$Sutils.c
-else ifeq ($(MAKECMDGOALS), bonus)
+SRC	= 	$Scmds.c \
+		$Spipex.c \
+		$Sutils.c
+
+ifeq ($(MAKECMDGOALS), bonus)
 	SRC = $Scmds_bonus.c \
 	$Spipex_bonus.c \
 	$Sutils_bonus.c

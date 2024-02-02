@@ -6,7 +6,7 @@
 #    By: seozcan <seozcan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/07 19:14:12 by seozcan           #+#    #+#              #
-#    Updated: 2024/02/01 18:13:09 by seozcan          ###   ########.fr        #
+#    Updated: 2024/02/02 18:34:23 by seozcan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,9 @@ include settings.mk
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::DIRECTORIES::
 
-ifeq ($(MAKECMDGOALS),)
-	S = src/
-else ifeq ($(MAKECMDGOALS), all)
-	S = src/
-else ifeq ($(MAKECMDGOALS), bonus)
+S = src/
+
+ifeq ($(MAKECMDGOALS), bonus)
 	S = bonus/
 endif
 
@@ -35,26 +33,28 @@ M 		=	minilibx-linux/
 CFLAGS	+=	-I$I
 
 ifeq ($(IS_LIB), true)
-	CFLAGS	+=	-I$L$I
+	CFLAGS += -I$L$I
 	LIBS += $(LIB)
 endif
 
 ifeq ($(IS_PTF), true)
-	CFLAGS	+=	-I$P$I
+	CFLAGS += -I$P$I
 	LIBS += $(PTF)
 endif
 
 ifeq ($(IS_MLX), true)
-	CFLAGS	+=	-I$M
+	CFLAGS += -I$M
 	LIBS += $(MLX)
 endif
 
 CLFAGS	+=	-Wconversion
 
-CFLAGS	+=	-g3 -fsanitize=address
+CFLAGS	+=	-g3 
+
+CFLAGS	+=	-fsanitize=address
 
 ifeq ($(IS_MLX), true)
-	MLXFLAGS	=	-lXext -lX11 -lm
+	MLXFLAGS = -lXext -lX11 -lm
 endif
 
 RM		=	/bin/rm -rf
