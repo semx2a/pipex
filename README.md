@@ -1,4 +1,4 @@
-# Pipex Project
+# Pipex
 
 The Pipex project is a detailed exploration and programming of a UNIX pipe. The project is coded in C and adheres to the 42 School coding norm. This project served as an excellent opportunity to gain a deeper understanding of system calls and inter-process communication via pipes in a UNIX-like system.
 
