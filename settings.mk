@@ -5,6 +5,12 @@ ifndef SETTINGS_MK
 
 NAME	=	pipex
 
+ifeq ($(MAKECMDGOALS), bonus)
+NAME	=	pipex_bonus
+endif
+
+UNAME	=	$(shell uname)
+
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::SOURCE::
 
 SRC	= 	$Scmds.c \
@@ -19,7 +25,11 @@ endif
 
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::COMPILERS::
 
-CC		=	clang
+CC		=	gcc
+
+ifneq ($(UNAME), Darwin)
+CC	=	clang
+endif
 
 CFLAGS	=	-Wall -Wextra -Werror
 
@@ -43,6 +53,6 @@ PTF		= 	$Plibftprintf.a
 
 IS_MLX	= 	false
 
-MLX		= 	$Mlibmlx_Linux.a
+MLX		= 	$Mlibmlx_$(UNAME).a
 
 endif
