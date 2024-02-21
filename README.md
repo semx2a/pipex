@@ -65,3 +65,18 @@ This is identical to the shell command:
 < file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
 
 ```
+## Troubleshooting
+
+If you encounter the following error when running make:
+
+```shell
+make: *** No rule to make target 'libft.a', needed by 'pipex'.  Stop.
+
+```
+
+You can fix it by running the following command:
+
+```shell
+git submodule update --init --recursive
+
+```
