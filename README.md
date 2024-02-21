@@ -2,7 +2,7 @@
 
 The Pipex project is a detailed exploration and programming of a UNIX pipe. The project is coded in C and adheres to the 42 School coding norm. This project served as an excellent opportunity to gain a deeper understanding of system calls and inter-process communication via pipes in a UNIX-like system.
 
-## Usage 
+## Usage
 
 You can launch the test script by running the following command:
 
@@ -12,6 +12,7 @@ chmod +x test.sh && ./test.sh
 ```
 
 You can use the following arguments to run the test script:
+
 ```shell
 ./test.sh clean # Cleans the project
 ./test.sh bonus # Runs the bonus project tests
@@ -65,6 +66,7 @@ This is identical to the shell command:
 < file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
 
 ```
+
 ## Troubleshooting
 
 If you encounter the following error when running make:
