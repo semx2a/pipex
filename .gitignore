@@ -1,4 +1,10 @@
 ### C ###
+# Project settings
+pipex
+random.txt
+trace/*.txt
+trace
+
 # Prerequisites
 *.d
 

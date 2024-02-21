@@ -3,6 +3,7 @@
 SEP="------------------------------------------------------------"
 RESET="\033[0m"
 
+# function to run pipex tests
 function run {
 	echo "Running $1 $2 $3 $4"
 	echo $SEP
@@ -31,15 +32,37 @@ echo -e "$RESET"
 
 mkdir -p trace
 
+# create file with random data
 echo $(head -c 1024 /dev/urandom) > random.txt
 
-run Makefile cat "grep NAME" testOutput1.txt
-run testOutput1.txt cat wc testOutput2.txt
-run testOutput1.txt cat wc testOutput2bis.txt
-run /dev/null cat wc testOutput2bis.txt
-run random.txt base64 shasum testOutput3.txt
-run /dev/null cat cat testOutput4.txt
+# tests
+run Makefile cat "grep NAME" userOutput_1.txt
+run userOutput_1.txt cat wc userOutput_2.txt
+run /dev/null cat wc userOutput_3.txt
+run random.txt base64 shasum userOutput_4.txt
+run /dev/null cat cat userOutput_5.txt
 
-mv testOutput*.txt trace
+# bash tests
+bash -c < Makefile cat | grep NAME > bashOutput_1.txt
+bash -c < bashOutput_1.txt cat | wc > bashOutput_2.txt
+bash -c < /dev/null cat | wc > bashOutput_3.txt
+bash -c < random.txt base64 | shasum > bashOutput_4.txt
+bash -c < /dev/null cat | cat > bashOutput_5.txt
 
-echo "Done! Check 'trace' folder for output files."
+# move files to trace folder
+mv *Output*.txt trace
+if [ $? -ne 0 ]; then
+	echo "Error moving files to trace folder."
+	exit 1
+else
+	echo "Done! Check 'trace' folder for testOutput files."
+fi
+
+# compare pipex and bash outputs for each test
+for i in {1..5}
+do
+	echo -e "\n$SEP"
+	echo "Comparing userOutput_$i.txt with bashOutput_$i.txt"
+	echo $SEP
+	diff -sy trace/userOutput_$i.txt trace/bashOutput_$i.txt
+done
