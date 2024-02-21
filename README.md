@@ -82,3 +82,9 @@ You can fix it by running the following command:
 git submodule update --init --recursive
 
 ```
+
+If the git submodules didn't clone properly, you can run the following commands to clone the submodules:
+
+```bash
+git submodule update --init --force --remote
+```
